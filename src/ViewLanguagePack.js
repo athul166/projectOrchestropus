@@ -13,7 +13,8 @@ import FlatButton from 'material-ui/FlatButton';
 const customContentStyle = {
   width: '60%',
   maxWidth: 'none',
-  marginBottom:'10'
+  marginBottom:'10',
+  maxHeight:'none'
 };
 
 export default class ViewLanguagePack extends Component {
@@ -72,7 +73,7 @@ export default class ViewLanguagePack extends Component {
                   <CardText style={{'marginTop': '-15px'}}>
                     {this.props.SelectedCard[0].description}
                   </CardText>
-                  <div style={{'width':'100%','marginLeft' :'100','marginRight' :'100','marginTop':'10','marginBottom':'10'}}>
+                  <div style={{'width': '90%','margin-left':'80'}}>
                     <img src={"http://placehold.it/700x400"} />
                     <FloatingActionButton style={{'marginLeft': '625','marginTop': '-77px','marginBottom': '32px','overflowY':'hidden'}}>
                       <Edit />
