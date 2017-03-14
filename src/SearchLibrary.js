@@ -4,20 +4,23 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
-import NewComponent from './newComponent.js'
+import NewComponent from './newComponent.js';
+import { Container, Row, Col } from 'react-grid-system';
+import Divider from 'material-ui/Divider';
 
 
 const style = {
   width: '80%',
   margin: 'auto',
   marginTop:'10',
-  textAlign: 'center',
+  textAlign: 'center'
+
 };
 
 const chipStyl = {
 
   chip: {
-    margin: 4,
+    margin: 4
     }
 
 };
@@ -68,53 +71,89 @@ class SearchLibrary extends Component {
 
    onClickGo(event)
   {
-    alert("dsfadsf");
-    var input=this.state.value;
-    var that=this;
-      var count=0;
-      var chip_arr=this.state.chipContent;
-      chip_arr.push(input);
+        var arr1=this.state.arr_div;
+        arr1=[];
+        var totalcount=0;
+        var count=0;
+        var input=this.state.value;
+        var sub=this.state.chipContent;
+        // alert(this.state.chipContent);
+        sub.push(input);
+        console.log("chipcontent");
+        console.log(sub);
+        this.state.arr_div.map((a,e)=>{
+        // arr1.map((a,e)=>{
+        if(input.toLowerCase()===a.Name || input.toLowerCase()===a.description || input.toLowerCase()===a.Creator)
+     {
+       //alert("jkjioio");
+       var n=this.state.new_arr;
+       n.push(a);
+       this.setState({new_arr:n});
+     }
+     else {
 
-    /////////////////////////////
-    console.log(this.state.arr_div);
-    this.state.arr_div.map((a,e)=>{
-      var tags_arr=a.tags;
-      if(chip_arr.length==tags_arr)
-      {
-      tags_arr.map((t,i)=>{
-        // console.log("value of t "+t+"   i "+i+"   and textbox "+that.state.value);
+        var main=a.tags;
 
-        if(t.toLowerCase()===input.toLowerCase())
-        {
-          console.log(a);
-          var newarr=this.state.new_arr;
-          newarr.push(a);
-          that.setState({arr_div:newarr});
-        //  console.log("Now state is "+that.state.arr_div.tags);
-          count++;
-        }
-
-    });
-  }
-  });
-    if(count==0)
-    {
-      alert("Sorry no workflow found");
-    }
-    else {
+         for(var i=0;i<main.length;i++)
+          {
+            for(var j=0;j<sub.length;j++)
+            {
+              if (main[i] == sub[j])
+               {
+                 //   main[i] = -1;
+                 console.log(main[i]+"     "+sub[i]);
+                  count++;
+                  break;
+               }
+            }
+          }
+          if (count == sub.length)
+          {
+            //alert("equialaa");
+            var c1=0;
+            totalcount++;
+          //  alert(this.state.chipContent);
+            arr1.push(a);
+            console.log("after pushing");
+            console.log(arr1);
+            this.setState({new_arr:arr1});
+            console.log("arra_div");
+            console.log(this.state.arr_div);
+                //  var c=0;
+                //   var arr=this.state.chipContent;
+                //   arr.map((d,m)=>{
+                //     if(d===input)
+                //     {
+                //       c++;
+                //     }
+                //   });
+                //   if(c==0)
+                //   arr.push(input);
+                //   that.setState({chipContent:arr});
+       }
+       count=0;
+}
+      this.setState({value:''});
+         });
+     if(totalcount==0)
+     {
+       //alert("sorry no workflow found");
+     }
+     else {
       var c=0;
-      var arr=that.state.chipContent;
-      arr.map((d,m)=>{
-        if(d===input)
-        {
-          c++;
-        }
-      });
-      if(c==0)
-      arr.push(input);
-      that.setState({chipContent:arr});
-    }
-    this.setState({value:''});
+       var arr=this.state.chipContent;
+       arr.map((d,m)=>{
+         if(d===input)
+         {
+           c++;
+         }
+       });
+       if(c==0)
+       arr.push(input);
+       this.setState({chipContent:arr});
+     }
+     totalcount=0;
+
   }
 
   handleChange(evt)
@@ -135,14 +174,42 @@ class SearchLibrary extends Component {
       );
     })
     console.log(this.state.arr_div);
+    var status2=false;
+    if(this.state.new_arr.length===0){
+
+      status2=true;
+    }
+    else {
+      status2=false;
+    }
   return (
     <div style={style}>
+    <Container>
+      <Row>
           <TextField
                 hintText="Search here" value={this.state.value}
                 floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)}/>
           <RaisedButton label="Go" primary={true} onClick={this.onClickGo.bind(this)} style={{'marginLeft':'5'}}/>
-          <div style={{'width':'40%','margin':'auto','display':'-webkit-box'}}>{items}</div>
-          <NewComponent pageData={this.state.arr_div} />
+      </Row>
+      <Row>
+          <div style={{'position':'absolute','width':'40%','margin-left': '374','display':'-webkit-box'}}>{items}</div>
+      </Row>
+      <Row  style={{'textAlign':'left'}}>
+       <h3>Local Repo</h3>
+       <Divider />
+          {status2 ? <NewComponent pageData={this.state.arr_div}/> : <NewComponent pageData={this.state.new_arr}/> }
+      </Row>
+      <Row style={{'textAlign':'left','fontFamily':'Roboto'}}>
+       <h3>Online Repo</h3>
+       <Divider />
+          {status2 ? <NewComponent pageData={this.state.arr_div}/> : <NewComponent pageData={this.state.new_arr}/> }
+      </Row>
+      <Row style={{'textAlign':'left','fontFamily':'Roboto'}}>
+       <h3>Recommended</h3>
+       <Divider />
+          {status2 ? <NewComponent pageData={this.state.arr_div}/> : <NewComponent pageData={this.state.new_arr}/> }
+      </Row>
+    </Container>
     </div>
     );
   }

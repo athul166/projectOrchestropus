@@ -12,8 +12,10 @@ const style = {
               styleCard:{
                   height: 200,
                   width: 300,
-                  margin: 5,
-                  display: 'inline-block'
+                  margin: 15,
+                  marginLeft: 20,
+                  display: 'inline-block',
+                  textAlign:'left',
                 }
      };
 
@@ -74,7 +76,7 @@ class NewComponent extends Component{
     });
 
 		return(
-                <div style={{'margin':'auto'}}>
+                <div style={{'margin':'auto','marginTop':'8','marginLeft':'50'}}>
                  {status1 ? <ViewLanguagePack SelectedCard={this.state.SelectedCard} changeStatus={this.onCloseHandle.bind(this)}/> : listItems}
                 </div>
 			);
