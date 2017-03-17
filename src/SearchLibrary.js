@@ -7,20 +7,22 @@ import axios from 'axios';
 import NewComponent from './newComponent.js';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
+import CardComponent from './CardComponent.js';
+
+
 
 
 const style = {
   width: '80%',
   margin: 'auto',
   marginTop:'10',
-  textAlign: 'center'
-
+  textAlign: 'center',
 };
 
 const chipStyl = {
 
   chip: {
-    margin: 4
+    margin: 4,
     }
 
 };
@@ -45,14 +47,16 @@ class SearchLibrary extends Component {
     var _this = this;
     this.serverRequest =
       axios
-        .get("http://localhost:4000/db")
+        .get("http://localhost:4000/Workflows")
         .then(function(result) {
-          //console.log(result.data.Workflows);
+        console.log(result.data);
           _this.setState({
-            arr_div: result.data.Workflows
+            arr_div: result.data
           });
+console.log("state is "+_this.state.arr_div);
         })
-  }
+
+    }
 
   componentWillUnmount(){
     this.serverRequest.abort();
@@ -62,6 +66,12 @@ class SearchLibrary extends Component {
     var arr=this.state.chipContent;
     arr.splice(i,1);
     this.setState({chipContent:arr});
+    if(this.state.chipContent.length==0)
+  {  alert("no searching item");
+  this.setState({new_arr:[]});
+}
+    else
+    this.click();
   }
    handleTouchTap() {
     alert('You clicked the Chip.');
@@ -71,96 +81,215 @@ class SearchLibrary extends Component {
 
    onClickGo(event)
   {
-        var arr1=this.state.arr_div;
-        arr1=[];
-        var totalcount=0;
-        var count=0;
-        var input=this.state.value;
-        var sub=this.state.chipContent;
-        // alert(this.state.chipContent);
-        sub.push(input);
-        console.log("chipcontent");
-        console.log(sub);
-        this.state.arr_div.map((a,e)=>{
-        // arr1.map((a,e)=>{
-        if(input.toLowerCase()===a.Name || input.toLowerCase()===a.description || input.toLowerCase()===a.Creator)
+    var c=0;
+    var chip=this.state.chipContent;
+      var chip1=this.state.chipContent;
+   chip.push(this.state.value);
+   var input=this.state.value;
+   this.setState({new_arr:[]});
+   var newarr=this.state.new_arr;
+    newarr=[];
+      var count=0;
+      var t=0;
+this.state.arr_div.map((a,e)=>
+{
+    var tags_arr=a.tags;
+    for(var i=0;i<tags_arr.length;i++)
+    {
+      if(tags_arr[i]===input.toLowerCase())
+      {
+        t++;
+      }
+    }
+  });
+  if(t==0)
+  {
+    alert("please enter valid searching item")
+  }
+  else {
+
+   this.state.arr_div.map((a,e)=>
+  {
+     if(a.Name.toLowerCase()===input.toLowerCase()||a.description.toLowerCase().includes(input.toLowerCase()))
      {
-       //alert("jkjioio");
-       var n=this.state.new_arr;
-       n.push(a);
-       this.setState({new_arr:n});
+    //  alert("in name      "+ c);
+      c++;
+
+       newarr.push(a);
+       this.setState({new_arr:newarr});
+       chip1=chip;
+       this.setState({chipContent:chip1});
      }
      else {
 
-        var main=a.tags;
-
-         for(var i=0;i<main.length;i++)
+        var tags_arr=a.tags;
+        for(var i=0;i<tags_arr.length;i++)
+        {
+          for(var j=0;j<chip.length;j++)
           {
-            for(var j=0;j<sub.length;j++)
-            {
-              if (main[i] == sub[j])
-               {
-                 //   main[i] = -1;
-                 console.log(main[i]+"     "+sub[i]);
-                  count++;
-                  break;
-               }
+            if (tags_arr[i] == chip[j])
+             {
+            count++;
+          //  alert(count+"     "+chip.length);
+            break;
+             }
+          }
+        }
+
+        if(count==chip.length)
+        {
+         alert("when equal   "+c);
+        c++;
+          newarr.push(a);
+          this.setState({new_arr:newarr});
+          chip1=chip;
+          this.setState({chipContent:chip1});
+        }
+        else
+        {
+          for(var i=0;i<chip.length;i++)
+          {//alert("choippp  "+  i  +"  "+chip[i]);
+            for(var j=0;j<tags_arr.length;j++)
+            {//alert("tags    "+j+"    "+tags_arr[i]);
+              if(chip[i]===tags_arr[j])
+              {
+                var m1=0;
+                for(var m=0;m<this.state.new_arr.length;m++)
+                {
+                  if(chip[i]===this.state.new_arr.length[m])
+                  {
+                    m1++;
+                    break;
+                  }
+                }
+                if(m1==0)
+                {
+              //   alert("searchning for or   "+c);
+                c++;
+                  newarr.push(a);
+                  this.setState({new_arr:newarr});
+                  chip1=chip;
+                  this.setState({chipContent:chip1});
+                }
+              }
             }
           }
-          if (count == sub.length)
-          {
-            //alert("equialaa");
-            var c1=0;
-            totalcount++;
-          //  alert(this.state.chipContent);
-            arr1.push(a);
-            console.log("after pushing");
-            console.log(arr1);
-            this.setState({new_arr:arr1});
-            console.log("arra_div");
-            console.log(this.state.arr_div);
-                //  var c=0;
-                //   var arr=this.state.chipContent;
-                //   arr.map((d,m)=>{
-                //     if(d===input)
-                //     {
-                //       c++;
-                //     }
-                //   });
-                //   if(c==0)
-                //   arr.push(input);
-                //   that.setState({chipContent:arr});
-       }
-       count=0;
+  }
+
+        count=0;
+     }
+
+
+  });
+
+  if(c==0)
+  {
+
+    alert("sorry no workflow found");
+  }
+  c=0;
+  this.setState({value:''});
 }
-      this.setState({value:''});
-         });
-     if(totalcount==0)
+  }
+
+
+
+click(input)
+{
+
+  var chip=this.state.chipContent;
+  // chip.push(this.state.value);
+   var input=this.state.value;
+   this.setState({new_arr:[]});
+   var newarr=this.state.new_arr;
+    newarr=[];
+      var count=0;
+   this.state.arr_div.map((a,e)=>
+  {
+     if(a.Name.toLowerCase()===input.toLowerCase()||a.description.toLowerCase()===input.toLowerCase())
      {
-       //alert("sorry no workflow found");
+      // alert("in name      "+a.Name);
+       newarr.push(a);
+       this.setState({new_arr:newarr});
+         this.setState({chipContent:chip});
      }
      else {
-      var c=0;
-       var arr=this.state.chipContent;
-       arr.map((d,m)=>{
-         if(d===input)
-         {
-           c++;
-         }
-       });
-       if(c==0)
-       arr.push(input);
-       this.setState({chipContent:arr});
-     }
-     totalcount=0;
 
+        var tags_arr=a.tags;
+        for(var i=0;i<tags_arr.length;i++)
+        {
+          for(var j=0;j<chip.length;j++)
+          {
+            if (tags_arr[i] == chip[j])
+             {
+            count++;
+          //  alert(count+"     "+chip.length);
+            break;
+             }
+          }
+        }
+
+        if(count==chip.length)
+        {
+      //    alert("when equal   "+a.Name);
+
+          newarr.push(a);
+          this.setState({new_arr:newarr});
+            this.setState({chipContent:chip});
+        }
+        else
+        {
+          for(var i=0;i<chip.length;i++)
+          {//alert("choippp  "+  i  +"  "+chip[i]);
+            for(var j=0;j<tags_arr.length;j++)
+            {//alert("tags    "+j+"    "+tags_arr[i]);
+              if(chip[i]===tags_arr[j])
+              {
+                var m1=0;
+                for(var m=0;m<this.state.new_arr.length;m++)
+                {
+                  if(chip[i]===this.state.new_arr.length[m])
+                  {
+                    m1++;
+                    break;
+                  }
+                }
+                if(m1==0)
+                {
+            //      alert("searchning for or   "+a.Name);
+                  newarr.push(a);
+                  this.setState({new_arr:newarr});
+                  this.setState({chipContent:chip});
+                }
+              }
+            }
+          }
   }
+
+        count=0;
+     }
+
+  });
+  // var a=this.state.new_arr;
+  // a.reverse();
+  // this.setState({new_arr:a});
+  // console.log("after reverse");
+  // console.log(this.state.new_arr);
+  this.setState({value:''});
+}
+
+handleEnter(event){
+  if(event.charCode == 13){
+    this.onClickGo();
+  }
+}
+
+
 
   handleChange(evt)
   {
     this.setState({value:evt.target.value})
   }
-
   render() {
     const items = this.state.chipContent.map((item,i) =>{
       return(
@@ -197,17 +326,17 @@ class SearchLibrary extends Component {
       <Row  style={{'textAlign':'left'}}>
        <h3>Local Repo</h3>
        <Divider />
-          {status2 ? <NewComponent pageData={this.state.arr_div}/> : <NewComponent pageData={this.state.new_arr}/> }
+          {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
       </Row>
       <Row style={{'textAlign':'left','fontFamily':'Roboto'}}>
        <h3>Online Repo</h3>
        <Divider />
-          {status2 ? <NewComponent pageData={this.state.arr_div}/> : <NewComponent pageData={this.state.new_arr}/> }
+          {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
       </Row>
       <Row style={{'textAlign':'left','fontFamily':'Roboto'}}>
        <h3>Recommended</h3>
        <Divider />
-          {status2 ? <NewComponent pageData={this.state.arr_div}/> : <NewComponent pageData={this.state.new_arr}/> }
+          {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
       </Row>
     </Container>
     </div>
