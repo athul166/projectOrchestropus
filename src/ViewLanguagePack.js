@@ -39,15 +39,19 @@ export default class ViewLanguagePack extends Component {
      this.props.changeStatus();
    };
   render(){
+          var tags="";
+          this.props.SelectedCard[0].tags.forEach((tag)=>{
+            tags=tags+tag+","
+          })
           return(
             <Dialog modal={true} open={this.state.open} contentStyle={customContentStyle} autoScrollBodyContent={true}>
             <Container style={{'paddingLeft':'0','paddingRight':'0'}}>
              <Row>
                 <Col sm={1} md={1}>
-                   <Avatar size={70}>LP</Avatar>
+                   <Avatar size={70}>WF</Avatar>
                 </Col>
                 <Col sm={7} md={10}>
-                    <CardTitle title={this.props.SelectedCard[0].Name} subtitle={this.props.SelectedCard[0].Creator} style={{'margin-left':'20','padding': '4'}}/>
+                    <CardTitle title={this.props.SelectedCard[0].workflow_name} subtitle={this.props.SelectedCard[0].creator} style={{'margin-left':'20','padding': '4'}}/>
                 </Col>
                 <Col sm={1} md={1}>
                   <IconButton>
@@ -62,7 +66,7 @@ export default class ViewLanguagePack extends Component {
              </Row>
             <Row style={{'margin-top':'10','fontStyle':'italic'}}>
               <Col sm={8} >
-               tags:{this.props.SelectedCard[0].tags}
+               tags:{tags}
               </Col>
               <Col sm={3}>
                 <span style={{'float':'right'}}>{this.props.SelectedCard[0].downloads} downloads</span>
@@ -84,7 +88,7 @@ export default class ViewLanguagePack extends Component {
             <Row >
               <Col sm={6}>
                 <h4>Version</h4>
-                <span>{this.props.SelectedCard[0].version}</span>
+                <span>{this.props.SelectedCard[0].stages[0].version}</span>
               </Col>
               <Col sm={6}>
                 <h4>Created</h4>
@@ -96,41 +100,3 @@ export default class ViewLanguagePack extends Component {
             );
         }
   }
-
-
-  // <IconButton style={{'marginLeft': '850','overflowY':'hidden','marginLeft':'815'}}>
-  //   <Close onTouchTap={this.handleCloseDialog}/>
-  // </IconButton>
-  //       <GridList cellHeight={180} style={styles.gridList}>
-  //           <GridTile>
-  //             <img src={"http://placehold.it/200"} />
-  //           </GridTile>
-  //           <GridTile>
-  //
-  //               {this.props.SelectedCard[0].tags}<br/>
-  //               {this.props.SelectedCard[0].downloads}
-  //             </CardTitle>
-  //           </GridTile>
-  //       </GridList>
-  //       <CardText style={{'marginTop': '-15px'}}>
-  //         {this.props.SelectedCard[0].description}
-  //       </CardText>
-  //       <div style={{'width': '90%','margin-left':'80'}}>
-  //         <img src={"http://placehold.it/700x400"} />
-  //         <FloatingActionButton style={{'marginLeft': '625','marginTop': '-77px','marginBottom': '32px','overflowY':'hidden'}}>
-  //           <Edit />
-  //         </FloatingActionButton>
-  //       </div>
-  //
-  //       <Divider style={{'marginLeft' :'20','marginRight' :'20'}} />
-  //       <h3 style={{'marginLeft': '20px','margin-bottom': '-12px'}}> Additional Information</h3>
-  //       <GridList cellHeight={100} style={{'marginLeft':20}}>
-  //           <GridTile >
-  //             <h4>Version</h4>
-  //             <span>{this.props.SelectedCard[0].version}</span>
-  //           </GridTile>
-  //           <GridTile >
-  //             <h4>Created On</h4>
-  //             <span>{this.props.SelectedCard[0].created_on}</span>
-  //           </GridTile>
-  //       </GridList>

@@ -34,10 +34,10 @@ import axios from 'axios';
 const style = {
               styleCard:{
                   height: 200,
-                  width: 300,
+                  width: 320,
                   margin: 5,
                   display: 'inline-block',
-                  whiteSpace: 'nowrap'
+                  //whiteSpace: 'nowrap'
 
                },
                CardText:{
@@ -78,6 +78,11 @@ class CardComponent extends Component{
     const status1=this.state.isEditing;
     const linkStyle=null;
     const listItems = this.props.pageData.map((item) => {
+      var tag="";
+      const tags=item.tags.map((a)=>{
+         return tag+a+',';
+       });
+       console.log("map function"+tags);
       //var x=item.Name.substring(0,8);
       return(
 
@@ -95,11 +100,11 @@ class CardComponent extends Component{
           </Avatar>
 
          </Col>
-         <Col sm={4}  >
+         <Col sm={10}  >
           <CardTitle
           style={style.CardText}
-           title={item.Name}
-           subtitle={item.Creator}
+           title={item.workflow_name}
+           subtitle={item.creator}
 
           />
         </Col>
@@ -107,14 +112,13 @@ class CardComponent extends Component{
         </Row>
       <Row>
        <CardText >
-          Description of Workflow.
+          {item.description}
     </CardText>
       </Row>
 
      <Row>
       <Col sm={3}>
-      {item.tags[0]},
-      {item.tags[1]}
+      {tags}
       </Col>
       </Row>
 
