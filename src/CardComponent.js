@@ -16,25 +16,23 @@ import {
   purple500,
 } from 'material-ui/styles/colors';
 
-const style1 = {marginTop: 15,
+const style1 = {margin: 15,
                 backgroundColor:'#FFF59D '
                };
-
-
 
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {GridList, GridTile} from 'material-ui/GridList';
-import ViewLanguagePack from './ViewLanguagePack.js';
+import ViewWorkFlow from './ViewWorkFlow.js';
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
 import axios from 'axios';
 
 const style = {
               styleCard:{
                   height: 200,
-                  width: 320,
+                  width: 400,
                   margin: 5,
                   display: 'inline-block',
                   //whiteSpace: 'nowrap'
@@ -43,7 +41,13 @@ const style = {
                CardText:{
                  whiteSpace:'nowrap',
                  overflow:'hidden',
-                 position:'reative'
+                 position:'reative',
+                 display:'block'
+               },
+               CardText1:{
+                 marginLeft:5,
+                 //fontFamily:'Times New Roman',
+                 fontSize:13
                }
      };
 
@@ -79,8 +83,12 @@ class CardComponent extends Component{
     const linkStyle=null;
     const listItems = this.props.pageData.map((item) => {
       var tag="";
-      const tags=item.tags.map((a)=>{
+      const tags=item.tags.map((a,i)=>{
+        if(i<item.tags.length-1)
          return tag+a+',';
+        else {
+          return tag+a;
+        }
        });
        console.log("map function"+tags);
       //var x=item.Name.substring(0,8);
@@ -88,6 +96,7 @@ class CardComponent extends Component{
 
       <Card style={style.styleCard} onClick={this.onClickCardToNext.bind(this,item)}>
          <Container >
+         <Row>
           <Row>
          <Col sm={2}>
           <Avatar
@@ -111,18 +120,19 @@ class CardComponent extends Component{
 
         </Row>
       <Row>
-       <CardText >
+       <CardText style={style.CardText1}>
           {item.description}
-    </CardText>
+        </CardText>
       </Row>
 
-     <Row>
-      <Col sm={3}>
-      {tags}
-      </Col>
+     <Row >
+     <CardText style={style.CardText1} >
+        {tags}
+  </CardText>
+
       </Row>
 
-
+    </Row>
        </Container>
 
       </Card>
@@ -133,7 +143,7 @@ class CardComponent extends Component{
 
         return(
               <div>
-               {status1 ? <ViewLanguagePack SelectedCard={this.state.SelectedCard} changeStatus={this.onCloseHandle.bind(this)}/> : listItems}
+               {status1 ? <ViewWorkFlow SelectedCard={this.state.SelectedCard} changeStatus={this.onCloseHandle.bind(this)}/> : listItems}
               </div>
             );
     }

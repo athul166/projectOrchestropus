@@ -6,7 +6,6 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Cards from './cards.js';
 import SearchLibrary from './SearchLibrary.js'
-import NewComponent from './newComponent.js'
 import Home from './Home.js'
 
 class App extends Component {

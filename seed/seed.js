@@ -1,4 +1,4 @@
-var Workflows = require('../models/workflow');
+  var Workflows = require('../models/workflow');
 var Languagepacks = require('../models/languagepack');
 var mongoose = require('mongoose');
 
@@ -15,12 +15,19 @@ var workflow =[
   stages : [{
     version : '1',
     stage : {
+      "stages": {
         "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
           "REPOSITORY_URL": "{{payload.repoUrl}}",
           "BRANCH": "{{payload.repo_ref}}"
         }
+      },
+      "build": {
+        "type": "stackroute/js/build",
+        "depends_on": [
+          "gitClone"
+        ]
       },
       "eslint": {
         "type": "stackroute/js/eslint",
@@ -30,12 +37,6 @@ var workflow =[
         },
         "depends_on": [
           "build"
-        ]
-      },
-      "build": {
-        "type": "stackroute/js/build",
-        "depends_on": [
-          "gitClone"
         ]
       },
       "code-coverage": {
@@ -58,6 +59,7 @@ var workflow =[
           "build"
         ]
       }
+     }
     }
   }]
 }),
@@ -69,35 +71,37 @@ new Workflows({
   stages : [{
     version : '1',
     stage : {
-    "gitClone": {
-      "type": "stackroute/gruntjquery/git_clone",
-      "input": {
-        "REPOSITORY_URL": "{{payload.repoUrl}}",
-        "BRANCH": "{{payload.repo_ref}}"
+      "stages": {
+        "gitClone": {
+          "type": "stackroute/gruntjquery/git_clone",
+          "input": {
+            "REPOSITORY_URL": "{{payload.repoUrl}}",
+            "BRANCH": "{{payload.repo_ref}}"
+          }
+        },
+        "build": {
+          "type": "stackroute/gruntjquery/build",
+          "depends_on": [
+            "gitClone"
+          ]
+        },
+        "eslint": {
+          "type": "stackroute/gruntjquery/eslint",
+          "input": {
+            "INCLUDE": "{{payload.eslint.include}}",
+            "EXCLUDE": "{{payload.eslint.exclude}}"
+          },
+          "depends_on": [
+            "build"
+          ]
+        },
+        "grunt": {
+          "type": "stackroute/gruntjquery/grunt",
+          "depends_on": [
+            "build"
+          ]
+        }
       }
-    },
-    "eslint": {
-      "type": "stackroute/gruntjquery/eslint",
-      "input": {
-        "INCLUDE": "{{payload.eslint.include}}",
-        "EXCLUDE": "{{payload.eslint.exclude}}"
-      },
-      "depends_on": [
-        "build"
-      ]
-    },
-    "build": {
-      "type": "stackroute/gruntjquery/build",
-      "depends_on": [
-        "gitClone"
-      ]
-    },
-    "grunt": {
-      "type": "stackroute/gruntjquery/grunt",
-      "depends_on": [
-        "build"
-      ]
-    }
    }
  }]
 }),
@@ -109,48 +113,50 @@ new Workflows({
   stages : [{
     version : '1',
     stage :{
-    "gitClone": {
-      "type": "stackroute/js/git_clone",
-      "input": {
-        "REPOSITORY_URL": "{{payload.repoUrl}}",
-        "BRANCH": "{{payload.repo_ref}}"
+     "stages": {
+      "gitClone": {
+        "type": "stackroute/js/git_clone",
+        "input": {
+          "REPOSITORY_URL": "{{payload.repoUrl}}",
+          "BRANCH": "{{payload.repo_ref}}"
+        }
+      },
+      "build": {
+        "type": "stackroute/js/build",
+        "depends_on": [
+          "gitClone"
+        ]
+      },
+      "eslint": {
+        "type": "stackroute/js/eslint",
+        "input": {
+          "INCLUDE": "{{payload.eslint.include}}",
+          "EXCLUDE": "{{payload.eslint.exclude}}"
+        },
+        "depends_on": [
+          "build"
+        ]
+      },
+      "code-coverage": {
+        "type": "stackroute/js/gulpistanbul",
+        "input": {
+          "INCLUDE": "{{payload.codecoverage.include}}",
+          "EXCLUDE": "{{payload.codecoverage.exclude}}"
+        },
+        "depends_on": [
+          "build"
+        ]
+      },
+      "whitebox": {
+        "type": "stackroute/js/gulp",
+        "input": {
+          "INCLUDE": "{{payload.whitebox.include}}",
+          "EXCLUDE": "{{payload.whitebox.exclude}}"
+        },
+        "depends_on": [
+          "build"
+        ]
       }
-    },
-    "eslint": {
-      "type": "stackroute/js/eslint",
-      "input": {
-        "INCLUDE": "{{payload.eslint.include}}",
-        "EXCLUDE": "{{payload.eslint.exclude}}"
-      },
-      "depends_on": [
-        "build"
-      ]
-    },
-    "build": {
-      "type": "stackroute/js/build",
-      "depends_on": [
-        "gitClone"
-      ]
-    },
-    "code-coverage": {
-      "type": "stackroute/js/gulpistanbul",
-      "input": {
-        "INCLUDE": "{{payload.codecoverage.include}}",
-        "EXCLUDE": "{{payload.codecoverage.exclude}}"
-      },
-      "depends_on": [
-        "build"
-      ]
-    },
-    "whitebox": {
-      "type": "stackroute/js/gulp",
-      "input": {
-        "INCLUDE": "{{payload.whitebox.include}}",
-        "EXCLUDE": "{{payload.whitebox.exclude}}"
-      },
-      "depends_on": [
-        "build"
-      ]
     }
    }
  }]
@@ -163,35 +169,37 @@ new Workflows({
   stages : [{
     version : '1',
     stage :{
-    "gitClone": {
-      "type": "stackroute/js/git_clone",
-      "input": {
-        "REPOSITORY_URL": "{{payload.repoUrl}}",
-        "BRANCH": "{{payload.repo_ref}}"
+      "stages": {
+        "gitClone": {
+          "type": "stackroute/js/git_clone",
+          "input": {
+            "REPOSITORY_URL": "{{payload.repoUrl}}",
+            "BRANCH": "{{payload.repo_ref}}"
+          }
+        },
+        "build": {
+          "type": "stackroute/js/build",
+          "depends_on": [
+            "gitClone"
+          ]
+        },
+        "eslint": {
+          "type": "stackroute/js/eslint",
+          "input": {
+            "INCLUDE": "{{payload.eslint.include}}",
+            "EXCLUDE": "{{payload.eslint.exclude}}"
+          },
+          "depends_on": [
+            "build"
+          ]
+        },
+        "whitebox": {
+          "type": "stackroute/js/testing",
+          "depends_on": [
+            "build"
+          ]
+        }
       }
-    },
-    "eslint": {
-      "type": "stackroute/js/eslint",
-      "input": {
-        "INCLUDE": "{{payload.eslint.include}}",
-        "EXCLUDE": "{{payload.eslint.exclude}}"
-      },
-      "depends_on": [
-        "build"
-      ]
-    },
-    "build": {
-      "type": "stackroute/js/build",
-      "depends_on": [
-        "gitClone"
-      ]
-    },
-    "whitebox": {
-      "type": "stackroute/js/testing",
-      "depends_on": [
-        "build"
-      ]
-    }
    }
  }]
 }),
@@ -203,12 +211,19 @@ new Workflows({
   stages : [{
     version : '1',
     stage :{
+     "stages": {
       "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
           "REPOSITORY_URL": "{{payload.repoUrl}}",
           "BRANCH": "{{payload.repo_ref}}"
         }
+      },
+      "build": {
+        "type": "stackroute/js/build",
+        "depends_on": [
+          "gitClone"
+        ]
       },
       "eslint": {
         "type": "stackroute/js/eslint",
@@ -219,13 +234,8 @@ new Workflows({
         "depends_on": [
           "build"
         ]
-      },
-      "build": {
-        "type": "stackroute/js/build",
-        "depends_on": [
-          "gitClone"
-        ]
       }
+    }
    }
  }]
 }),

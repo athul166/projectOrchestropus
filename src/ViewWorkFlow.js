@@ -4,8 +4,9 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import Divider from 'material-ui/Divider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Edit from 'material-ui/svg-icons/image/edit';
-import Close from 'material-ui/svg-icons/navigation/close'
+import Close from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
+import Event from 'material-ui/svg-icons/action/event';
 import SearchLibrary from './SearchLibrary.js'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -14,7 +15,7 @@ import Avatar from 'material-ui/Avatar';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 var moment = require('moment');
-//import Graph from './Graph';
+import Graph from './Graph';
 
 
 const customContentStyle = {
@@ -22,7 +23,7 @@ const customContentStyle = {
   maxWidth: 'none',
 };
 
-export default class ViewLanguagePack extends Component {
+export default class ViewWorkFlow extends Component {
   constructor(){
     super();
     this.state={
@@ -43,73 +44,74 @@ export default class ViewLanguagePack extends Component {
      this.setState({open: false});
      this.props.changeStatus();
    };
-  //  createJSON(data) {
-  //    let jsonData = data;
-  //    let nodes = [];
-  //    let links = [];
-   //
-  //    if(jsonData instanceof Object) {
-  //      if(jsonData['stages']) {
-  //        const stages = Object.keys(jsonData['stages']);
-  //        stages.map((stageName) => {
-  //          if(jsonData['stages'][stageName] instanceof Object) {
-  //            let tempFlag = false;
-  //            for(let j = 0; j< nodes.length; j++) {
-  //              if(nodes[j]['name'].trim() === stageName.trim()) {
-  //                tempFlag = true;
-  //              }
-  //            }
-  //            if(!tempFlag) {
-  //              nodes.push({ name: stageName});
-  //            }
-  //            if(jsonData['stages'][stageName]['depends_on']) {
-  //              const targets = jsonData['stages'][stageName]["depends_on"];
-  //              for(let i = 0; i< targets.length; i++ ){
-  //                if(targets[i]) {
-  //                  let flag = false;
-  //                  let linkFlag = false;
-  //                  let sourceIndex = null;
-  //                  let targetIndex = null;
-  //                  for(let j = 0; j< nodes.length; j++) {
-  //                    // To find the source index
-  //                    if(nodes[j]['name'].trim() === stageName && !sourceIndex) {
-  //                      sourceIndex = j;
-  //                    }
-  //                    // To find the target index
-  //                    if(nodes[j]['name'].trim() === targets[i].trim() && !targetIndex) {
-  //                      targetIndex = j;
-  //                    }
-   //
-  //                    if(nodes[j]['name'].trim() === targets[i].trim()) {
-  //                      flag = true;
-  //                    }
-   //
-  //                    if(sourceIndex != null && targetIndex!= null && !linkFlag) {
-  //                      linkFlag = true;
-  //                      links.push({ source: sourceIndex, target: targetIndex});
-  //                    }
-  //                  }
-  //                }
-  //              }
-  //            }
-   //
-  //          }
-  //        });
-  //        this.setState({ nodes: nodes, links: links});
-  //      }
-  //    }
-  //  }
+   componentDidMount(){
+     let jsonData = this.props.SelectedCard[0].stages[0].stage;
+     let nodes = [];
+     let links = [];
+     if(jsonData instanceof Object) {
+       if(jsonData['stages']) {
+         const stages = Object.keys(jsonData['stages']);
+         stages.map((stageName) => {
+           if(jsonData['stages'][stageName] instanceof Object) {
+             let tempFlag = false;
+             for(let j = 0; j< nodes.length; j++) {
+               if(nodes[j]['name'].trim() === stageName.trim()) {
+                 tempFlag = true;
+               }
+             }
+             if(!tempFlag) {
+               nodes.push({ name: stageName});
+             }
+             if(jsonData['stages'][stageName]['depends_on']) {
+               const targets = jsonData['stages'][stageName]["depends_on"];
+               for(let i = 0; i< targets.length; i++ ){
+                 if(targets[i]) {
+                   let flag = false;
+                   let linkFlag = false;
+                   let sourceIndex = null;
+                   let targetIndex = null;
+                   for(let j = 0; j< nodes.length; j++) {
+                     // To find the source index
+                     if(nodes[j]['name'].trim() === stageName && !sourceIndex) {
+                       sourceIndex = j;
+                     }
+                     // To find the target index
+                     if(nodes[j]['name'].trim() === targets[i].trim() && !targetIndex) {
+                       targetIndex = j;
+                     }
+
+                     if(nodes[j]['name'].trim() === targets[i].trim()) {
+                       flag = true;
+                     }
+
+                     if(sourceIndex != null && targetIndex!= null && !linkFlag) {
+                       linkFlag = true;
+                       links.push({ source: sourceIndex, target: targetIndex});
+                     }
+                   }
+                 }
+               }
+             }
+           }
+         });
+         this.setState({ nodes: nodes, links: links});
+       }
+     }
+   else {
+       this.setState({ nodes: [], links: [], statePresent: true});
+   }
+ }
   render(){
         // const { width, height } = this.props;
-        // const styles = {
-        //   graph: {
-        //   width,
-        //   height,
-        //   bottom: 0,
-        //   position: 'fix',
-        //   border: '1px solid #323232',
-        //   }
-        // };
+        const styles = {
+          graph: {
+          width:'80%',
+          height:500,
+          bottom: 0,
+          position: 'fix',
+          border: '1px solid #323232',
+          }
+        };
           var tags="";
           var i=0;
           this.props.SelectedCard[0].tags.forEach((tag)=>{
@@ -126,7 +128,9 @@ export default class ViewLanguagePack extends Component {
           var date = new Date( parseInt( id, 16 ) * 1000 );
           //console.log(date);
           //console.log(moment(date.toString()).fromNow());
-          //this.createJSON(this.props.SelectedCard[0].stages[0].stage);
+          // console.log(this.props.SelectedCard[0].stages[0].stage);
+          // this.createJSON(this.props.SelectedCard[0].stages[0].stage);
+          //console.log(this.state.nodes);
           return(
             <Dialog modal={true} open={this.state.open} contentStyle={customContentStyle} autoScrollBodyContent={true}>
             <Container style={{'paddingLeft':'0','paddingRight':'0'}}>
@@ -135,11 +139,12 @@ export default class ViewLanguagePack extends Component {
                    <Avatar size={70}>WF</Avatar>
                 </Col>
                 <Col sm={7} md={10}>
-                    <CardTitle title={this.props.SelectedCard[0].workflow_name} subtitle={this.props.SelectedCard[0].creator} style={{'margin-left':'20','padding': '4'}}/>
+                    <CardTitle title={this.props.SelectedCard[0].workflow_name} subtitle={this.props.SelectedCard[0].creator}
+                      style={{'margin-left':'20','padding': '4'}}/>
                 </Col>
                 <Col sm={1} md={1}>
                   <IconButton>
-                    <Close onTouchTap={this.handleCloseDialog}/>
+                      <Close onClick={this.handleCloseDialog}/>
                   </IconButton>
                 </Col>
              </Row>
@@ -157,8 +162,9 @@ export default class ViewLanguagePack extends Component {
               </Col>
             </Row>
             <Row style={{'margin-top':'10'}}>
-              <Col>
-                <div style={{'width':'100%'}}>LanguagePack Stages</div>
+              <Col sm={12}>
+                  <Graph nodes={ this.state.nodes }
+                  links={ this.state.links } width={ 700 } height={ 400 } />
               </Col>
             </Row>
             <Row>

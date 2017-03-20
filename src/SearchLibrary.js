@@ -4,10 +4,16 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
-import NewComponent from './newComponent.js';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
 import CardComponent from './CardComponent.js';
+
+import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
+// just some icons for illustration (example only):
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import NewGameIcon from 'material-ui/svg-icons/av/playlist-add';
+import NewPageIcon from 'material-ui/svg-icons/action/note-add';
 
 const style = {
   width: '80%',
@@ -24,6 +30,13 @@ const chipStyl = {
 
 };
 
+// const plus_button_style={
+//
+//   position:'absolute',
+//   marginTop:'50%',
+//   marginLeft:'50%',
+//  };
+
 const iconStyles = {
   marginRight: 24,
 };
@@ -37,7 +50,8 @@ class SearchLibrary extends Component {
       value:'',
       chipContent:[],
       arr_div:[],
-      new_arr:[]
+      new_arr:[],
+       showComponent: false
     };
   }
   componentDidMount(){
@@ -103,15 +117,13 @@ this.setState({value:''});
 
 }
 
-
-
-
-
-
-
+_onButtonClick() {
+    this.setState({
+      showComponent: true,
+    });
+  }
 click(input)
 {
-
  var chip=this.state.chipContent;
   // chip.push(this.state.value);
    var input=this.state.value;
@@ -247,6 +259,36 @@ handleEnter(event){
        <h3>Recommended</h3>
        <Divider />
           {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
+      </Row>
+      <Row>
+        <Col sm={10}>
+        </Col>
+        <Col md={2} style={{'float':'right'}}>
+        <div>
+           <SpeedDial
+             fabContentOpen={
+               <ContentAdd />
+             }
+             fabContentClose={
+               <NavigationClose />
+             }
+           >
+
+             <SpeedDialItem
+
+               label="ADD WORKFLOW"
+               fabContent={<NewPageIcon/>}
+               onTouchTap={this._onButtonClick.bind(this)}
+             />
+
+             <SpeedDialItem
+               label="ADD LANGUAGE PACK"
+               fabContent={<NewPageIcon/>}
+
+             />
+       </SpeedDial>
+       </div>
+        </Col>
       </Row>
     </Container>
     </div>
