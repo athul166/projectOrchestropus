@@ -6,8 +6,12 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Cards from './cards.js';
 import SearchLibrary from './SearchLibrary.js'
-import Home from './Home.js'
+import Home from './Home.js';
+import RaisedButton from 'material-ui/RaisedButton';
 
+const style = {
+  margin: 12,
+};
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,8 +34,10 @@ class App extends Component {
             <AppBar
               title="Project"
               onLeftIconButtonTouchTap={this.handleToggle}
-              style={{textAlign:'center'}}
-            />
+              style={{textAlign:'center'}}>
+               <RaisedButton label="Home" style={style} />
+              </AppBar>
+
               <Drawer
                 docked={false}
                 width={250}

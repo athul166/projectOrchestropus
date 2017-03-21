@@ -14,6 +14,10 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import NewGameIcon from 'material-ui/svg-icons/av/playlist-add';
 import NewPageIcon from 'material-ui/svg-icons/action/note-add';
+import LanguagePack from './languagepack.js';
+import Workflow from './workflow.js';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Slider from 'material-ui/Slider';
 
 const style = {
   width: '80%',
@@ -51,7 +55,9 @@ class SearchLibrary extends Component {
       chipContent:[],
       arr_div:[],
       new_arr:[],
-       showComponent: false
+       showComponent: false,
+       status:'',
+       d3_status:false
     };
   }
   componentDidMount(){
@@ -111,15 +117,16 @@ onClickGo(event)
         _this.setState({
           new_arr: result.data
         });
-console.log("state is "+_this.state.arr_div);
+  console.log("state is "+_this.state.arr_div);
       })
 this.setState({value:''});
 
 }
 
 _onButtonClick() {
+  alert("lkl");
     this.setState({
-      showComponent: true,
+      showComponent: true,status:'workflow',d3_status:true
     });
   }
 click(input)
@@ -152,6 +159,7 @@ click(input)
             count++;
           //  alert(count+"     "+chip.length);
             break;
+
              }
           }
         }
@@ -206,6 +214,15 @@ handleEnter(event){
   }
 }
 
+_onLanguage()
+{
+  alert("lkldsfsdfsdfsdfsdfsdfsdfsdfsdfdf");
+    this.setState({
+      showComponent: true,status:'language'
+    });
+
+}
+
 
 
  handleChange(evt)
@@ -234,32 +251,43 @@ handleEnter(event){
       status2=false;
     }
   return (
+
+<div>{this.state.showComponent?
+    [
+      (this.state.status=='workflow'?
+     [
+        <Workflow  d3_status={this.state.d3_status} width={700} height={630} />
+     ]:<LanguagePack />),
+
+   ]:
     <div style={style}>
     <Container>
       <Row>
           <TextField
-                hintText="Search here" value={this.state.value}
+                hintText="Search here"
                 floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)}/>
           <RaisedButton label="Go" primary={true} onClick={this.onClickGo.bind(this)} style={{'marginLeft':'5'}}/>
       </Row>
       <Row>
           <div style={{'position':'absolute','width':'40%','margin-left': '374','display':'-webkit-box'}}>{items}</div>
       </Row>
-      <Row  style={{'textAlign':'left'}}>
-       <h3>Local Repo</h3>
-       <Divider />
-          {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
-      </Row>
-      <Row style={{'textAlign':'left','fontFamily':'Roboto'}}>
-       <h3>Online Repo</h3>
-       <Divider />
-          {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
-      </Row>
-      <Row style={{'textAlign':'left','fontFamily':'Roboto'}}>
-       <h3>Recommended</h3>
-       <Divider />
-          {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
-      </Row>
+      <Tabs style={{'marginTop':'40'}}>
+          <Tab label="Local Repo">
+            <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
+                All the downloaded files.
+            </div>
+          </Tab>
+          <Tab label="Online Repo" >
+            <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
+                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
+            </div>
+          </Tab>
+          <Tab label="Recommended" >
+            <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
+                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
+            </div>
+          </Tab>
+      </Tabs>
       <Row>
         <Col sm={10}>
         </Col>
@@ -284,14 +312,23 @@ handleEnter(event){
              <SpeedDialItem
                label="ADD LANGUAGE PACK"
                fabContent={<NewPageIcon/>}
+                onTouchTap={this._onLanguage.bind(this)}
 
              />
        </SpeedDial>
        </div>
+
         </Col>
       </Row>
     </Container>
-    </div>
+
+    </div> }
+
+
+</div>
+
+
+
     );
   }
 }

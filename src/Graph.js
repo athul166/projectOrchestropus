@@ -12,6 +12,9 @@ class Graph extends Component {
         refY = -Math.sqrt(cRadius),
         drSub = cRadius + refY;
 
+
+    d3.selectAll("svg").remove();
+
     var svg = d3.select(this.refs.mountPoint).append("svg:svg")
         .attr("width", width)
         .attr("height", height);
@@ -129,7 +132,7 @@ var drag = force.drag()
       height,
       bottom: 0,
       position: 'fix',
-      border: '1px solid #323232',
+
     };
 
      return (

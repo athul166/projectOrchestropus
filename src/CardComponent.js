@@ -32,7 +32,7 @@ import axios from 'axios';
 const style = {
               styleCard:{
                   height: 200,
-                  width: 400,
+                  width: 280,
                   margin: 5,
                   display: 'inline-block',
                   //whiteSpace: 'nowrap'
@@ -98,25 +98,13 @@ class CardComponent extends Component{
          <Container >
          <Row>
           <Row>
-         <Col sm={2}>
-          <Avatar
-          color={deepOrange300}
-          backgroundColor={style1.backgroundColor}
-
-          style={style1}
-           >
-          WF
-          </Avatar>
-
+          <Col sm={12}  >
+            <CardHeader
+             title={item.workflow_name}
+             subtitle={item.creator}
+             avatar={<Avatar>WF</Avatar>}
+           />
          </Col>
-         <Col sm={10}  >
-          <CardTitle
-          style={style.CardText}
-           title={item.workflow_name}
-           subtitle={item.creator}
-
-          />
-        </Col>
 
         </Row>
       <Row>

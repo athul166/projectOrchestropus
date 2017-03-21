@@ -5,15 +5,19 @@
   "dependencies": {
     "axios": "^0.15.3",
     "body-parser": "^1.17.1",
+    "code-mirror": "^4.0.1",
     "d3": "^3.5.17",
     "d3v4": "^4.2.2",
+    "material-ui": "^0.17.1",
     "moment": "^2.18.0",
     "mongoose": "^4.9.0",
     "react": "^15.4.2",
+    "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.2",
     "react-flexbox-grid": "^0.10.2",
     "react-grid-system": "^2.7.0",
-    "react-mui-speeddial": "0.0.6"
+    "react-mui-speeddial": "0.0.6",
+    "react-svg-buttons": "^0.3.1"
   },
   "devDependencies": {
     "react-scripts": "0.9.4"

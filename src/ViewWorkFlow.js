@@ -143,8 +143,8 @@ export default class ViewWorkFlow extends Component {
                       style={{'margin-left':'20','padding': '4'}}/>
                 </Col>
                 <Col sm={1} md={1}>
-                  <IconButton>
-                      <Close onClick={this.handleCloseDialog}/>
+                  <IconButton onClick={this.handleCloseDialog}>
+                      <Close />
                   </IconButton>
                 </Col>
              </Row>
@@ -164,7 +164,7 @@ export default class ViewWorkFlow extends Component {
             <Row style={{'margin-top':'10'}}>
               <Col sm={12}>
                   <Graph nodes={ this.state.nodes }
-                  links={ this.state.links } width={ 700 } height={ 400 } />
+                  links={ this.state.links } width={ 500 } height={ 400 } />
               </Col>
             </Row>
             <Row>

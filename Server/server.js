@@ -6,7 +6,7 @@ var searchRouter = require('./../routes/searchrouter');
 var mongoose = require('mongoose');
 var Workflow = require('./../models/workflow');
 
-var db = mongoose.connect("mongodb://localhost/workflowsandlanpacks");
+var db = mongoose.connect("mongodb://localhost:27018/workflowsandlanpacks");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
