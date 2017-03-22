@@ -12,10 +12,9 @@ var workflow =[
   creator : 'Henry Page',
   description : 'For server side JS CI',
   tags : ['js','javascript','eslint','istanbul','mocha'],
-  stages : [{
+  workflows : {
     version : '1',
-    stage : {
-      "stages": {
+    stages : {
         "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
@@ -59,19 +58,17 @@ var workflow =[
           "build"
         ]
       }
-     }
     }
-  }]
+  }
 }),
 new Workflows({
   workflow_name : 'JS-Grunt-Eslint',
   creator : 'Henry Page',
   description : 'For server side JS CI',
   tags : ['js','javascript','grunt','eslint'],
-  stages : [{
+  workflows : {
     version : '1',
-    stage : {
-      "stages": {
+    stages : {
         "gitClone": {
           "type": "stackroute/gruntjquery/git_clone",
           "input": {
@@ -102,18 +99,16 @@ new Workflows({
           ]
         }
       }
-   }
- }]
+ }
 }),
 new Workflows({
   workflow_name : 'JS-Gulp-Istanbul-Eslint',
   creator : 'Henry Page',
   description : 'For server side JS CI',
   tags : ['js','javascript','gulp','eslint','gulpistanbul'],
-  stages : [{
+  workflows : {
     version : '1',
-    stage :{
-     "stages": {
+    stages :{
       "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
@@ -157,19 +152,17 @@ new Workflows({
           "build"
         ]
       }
-    }
    }
- }]
+ }
 }),
 new Workflows({
   workflow_name : 'JS-Eslint-Test',
   creator : 'Henry Page',
   description : 'For server side JS CI',
   tags : ['js','javascript','grunt','eslint','testing'],
-  stages : [{
+  workflows : {
     version : '1',
-    stage :{
-      "stages": {
+    stages :{
         "gitClone": {
           "type": "stackroute/js/git_clone",
           "input": {
@@ -199,19 +192,17 @@ new Workflows({
             "build"
           ]
         }
-      }
    }
- }]
+ }
 }),
 new Workflows({
   workflow_name : 'JS-Eslint',
   creator : 'Henry Page',
   description : 'For server side JS CI',
   tags : ['js','javascript','eslint'],
-  stages : [{
+  workflows : {
     version : '1',
-    stage :{
-     "stages": {
+    stages :{
       "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
@@ -235,9 +226,8 @@ new Workflows({
           "build"
         ]
       }
-    }
    }
- }]
+ }
 }),
 ];
 for(var i=0;i< workflow.length;i++) {

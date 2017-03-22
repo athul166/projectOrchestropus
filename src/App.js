@@ -8,6 +8,8 @@ import Cards from './cards.js';
 import SearchLibrary from './SearchLibrary.js'
 import Home from './Home.js';
 import RaisedButton from 'material-ui/RaisedButton';
+import Monitor from './monitor1.js';
+import { Router, Route, Link, hashHistory } from 'react-router';
 
 const style = {
   margin: 12,
@@ -35,7 +37,7 @@ class App extends Component {
               title="Project"
               onLeftIconButtonTouchTap={this.handleToggle}
               style={{textAlign:'center'}}>
-               <RaisedButton label="Home" style={style} />
+            <RaisedButton label="Home" style={style} />
               </AppBar>
 
               <Drawer

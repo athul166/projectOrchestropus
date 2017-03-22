@@ -45,7 +45,8 @@ export default class ViewWorkFlow extends Component {
      this.props.changeStatus();
    };
    componentDidMount(){
-     let jsonData = this.props.SelectedCard[0].stages[0].stage;
+     let jsonData = this.props.SelectedCard[0].workflows[0];
+     console.log(jsonData);
      let nodes = [];
      let links = [];
      if(jsonData instanceof Object) {
@@ -178,7 +179,7 @@ export default class ViewWorkFlow extends Component {
             <Row >
               <Col sm={6}>
                 <h4>Version</h4>
-                <span>{this.props.SelectedCard[0].stages[0].version}</span>
+                <span>{this.props.SelectedCard[0].workflows.version}</span>
               </Col>
               <Col sm={6}>
                 <h4>Created</h4>

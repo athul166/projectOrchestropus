@@ -75,10 +75,6 @@ class CardComponent extends Component{
   }
     render()
     {
-
-   console.log(this.props.pageData);
-    const objArray=this.props.pageData;
-    //console.log(objArray);
     const status1=this.state.isEditing;
     const linkStyle=null;
     const listItems = this.props.pageData.map((item) => {
