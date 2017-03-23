@@ -18,12 +18,16 @@ var moment = require('moment');
 import Graph from './Graph';
 import Close from '../icons/close.png' ;
 import Edit from '../icons/edit.png';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const customContentStyle = {
   width:'60%',
   maxWidth: 'none',
 };
 
+const style = {
+  margin: 12,
+};
 export default class ViewWorkFlow extends Component {
   constructor(){
     super();
@@ -46,7 +50,8 @@ export default class ViewWorkFlow extends Component {
      this.props.changeStatus();
    };
    componentDidMount(){
-     let jsonData = this.props.SelectedCard[0].stages[0].stage;
+     let jsonData = this.props.SelectedCard[0].workflows;
+     console.log(jsonData);
      let nodes = [];
      let links = [];
      if(jsonData instanceof Object) {
@@ -158,7 +163,7 @@ export default class ViewWorkFlow extends Component {
               <Col sm={8} >
                tags:{tags}
               </Col>
-              <Col sm={3}>
+              <Col sm={2}>
                 <span style={{'float':'right'}}>{this.props.SelectedCard[0].downloads} downloads</span>
               </Col>
             </Row>
@@ -181,7 +186,7 @@ export default class ViewWorkFlow extends Component {
             <Row >
               <Col sm={6}>
                 <h4>Version</h4>
-                <span>{this.props.SelectedCard[0].stages[0].version}</span>
+                <span>{this.props.SelectedCard[0].workflows.version}</span>
               </Col>
               <Col sm={6}>
                 <h4>Created</h4>

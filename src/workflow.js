@@ -9,6 +9,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Graph from './Graph';
+import axios from 'axios';
 
 class Workflow extends Component {
   constructor(props) {
@@ -21,11 +22,16 @@ class Workflow extends Component {
       links: [],
       filename:'',
       errorText: '',
-      statePresent: true
+      statePresent: true,
+      creatorName:'',
+      workflowName:'',
+      tags:'',
+      description:''
     }
     this.updateFilename=this.updateFilename.bind(this);
     this.showFileName=this.showFileName.bind(this);
     this.setFocus=this.setFocus.bind(this);
+    this.save=this.save.bind(this);
   }
   twoFunc(e) {
     this.showFileName(e);
@@ -85,6 +91,97 @@ class Workflow extends Component {
       this.setState({ text:event});
       this.forceUpdate(this.createJSON);
   }
+
+
+  componentDidMount() {
+       setInterval(this.save, 12000);
+    }
+
+
+    save(){
+
+     // alert("name is this  "+document.getElementById('creatorName').value);
+     //var c=JSON.stringify(document.getElementById('creatorName').value);
+
+      //this.setState({creatorName:c});
+    //  console.log(this.state.creatorName);
+      var that=this;
+     // var creator=this.state.creatorName;
+      //alert(this.state.creatorName);
+  if(this.state.creatorName=='')
+  {
+  //  alert("Creator Name Can't be empty");
+  }else
+  if(this.state.workflowName=='')
+  {
+    // alert("Workflow Name Can't be empty")
+  }else
+  if(this.state.tags=='')
+  {
+    // alert("Tags Can't be empty")
+  }else
+  if(this.state.description=='')
+  {
+    // alert("Descripion Can't be empty")
+  }else
+  if(this.state.text=='')
+  {
+    //   alert("Workflow File Can't be empty")
+  }
+  else
+  {
+    axios.post('http://localhost:6007/workflows/delete',{
+   // creatorName: that.state.creatorName,
+    workflowName: that.state.workflowName,
+    // tags:that.state.tags,
+    // description:that.state.description,
+    // text:that.state.text
+  })
+  .then(function (response) {
+  //  alert("delted");
+    console.log(response);
+
+ })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+    // alert("Auto Save Enabled")
+     axios.post('http://localhost:6007/workflows/add',{
+      creatorName: that.state.creatorName,
+      workflowName: that.state.workflowName,
+      tags:that.state.tags,
+      description:that.state.description,
+      text:that.state.text
+    })
+    .then(function (response) {
+      console.log(response);
+
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+    }
+
+
+    onCreator(event)
+    {
+      this.setState({creatorName:event.target.value});
+      //alert(this.state.creatorName);
+    }
+    onName(event)
+    {
+    this.setState({workflowName:event.target.value});
+    }
+    onTags(event)
+    {
+    this.setState({tags:event.target.value});
+    }
+    onDesc(event)
+    {
+    this.setState({description:event.target.value});
+    }
 
 
   createJSON() {
@@ -187,18 +284,19 @@ class Workflow extends Component {
       color: 'red',
     },
 };
+
     return (
       <div className="App">
        <MuiThemeProvider>
       <GridList cellHeight="auto" cols={2} style={{marginTop:"2%"}}>
         <GridTile>
           <div >
-          <input type = 'text' name = 'creator' placeholder="Creator Name" style={{'border':0,'fontSize':'18'}} /> /
-           <input type = 'text' name = 'name' placeholder="   Name Of WorkFlow" style={{'border':0,'fontSize':'18'}} />
-<br/>
-          < input type = 'text' name = 'Tags' placeholder="Tags" style={{'border':0,'fontSize':'18'}} /><br/>
-          <textarea type='textarea' rows={2} cols={50} placeholder="Descripion"  style={{'border':0,'fontSize':'18'}}/>
-<br/><br/>
+          <input type = 'text' id = 'creatorName'  name = 'creator' onChange={this.onCreator.bind(this)} placeholder="Creator Name" style={{'border':0,'fontSize':'18'}} /> /
+           <input type = 'text' id = 'workflowName' name = 'name' onChange={this.onName.bind(this)} placeholder="   Name Of WorkFlow" style={{'border':0,'fontSize':'18'}} />
+ <br/>
+          < input type = 'text' id = 'tags' name = 'Tags' onChange={this.onTags.bind(this)} placeholder="Tags" style={{'border':0,'fontSize':'18'}} /><br/>
+          <textarea type='textarea' id = 'description' rows={2} cols={50}  onChange={this.onDesc.bind(this)} placeholder="Descripion"  style={{'border':0,'fontSize':'18'}}/>
+ <br/><br/>
           </div>
           <div >
           <CodeMirror ref="editor" onChange={this.handleChange.bind(this)} value={this.state.text}  options={options} />

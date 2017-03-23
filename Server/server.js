@@ -2,12 +2,15 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 var searchRouter = require('./../routes/searchrouter');
+var deleteRouter = require('./../routes/deleteRouter');
+var addRouter = require('./../routes/addRouter');
+
 
 var mongoose = require('mongoose');
 var Workflow = require('./../models/workflow');
 
 var db = mongoose.connect("mongodb://localhost:27017/workflowsandlanpacks");
-
+var url = "mongodb://localhost:27017/workflowsandlanpacks";
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -30,6 +33,9 @@ app.get('/',function(req,res){
     }})
 });
 
+
+app.use('/workflows/add',addRouter);
+app.use('/workflows/delete',deleteRouter);
 app.use('/search',searchRouter);
 
 app.listen(6007,function(){
