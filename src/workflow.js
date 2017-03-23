@@ -107,26 +107,26 @@ class Workflow extends Component {
     //  console.log(this.state.creatorName);
       var that=this;
      // var creator=this.state.creatorName;
-      alert(this.state.creatorName);
+      //alert(this.state.creatorName);
   if(this.state.creatorName=='')
   {
-    alert("Creator Name Can't be empty");
+  //  alert("Creator Name Can't be empty");
   }else
   if(this.state.workflowName=='')
   {
-     alert("Workflow Name Can't be empty")
+    // alert("Workflow Name Can't be empty")
   }else
   if(this.state.tags=='')
   {
-     alert("Tags Can't be empty")
+    // alert("Tags Can't be empty")
   }else
   if(this.state.description=='')
   {
-     alert("Descripion Can't be empty")
+    // alert("Descripion Can't be empty")
   }else
   if(this.state.text=='')
   {
-       alert("Workflow File Can't be empty")
+    //   alert("Workflow File Can't be empty")
   }
   else
   {
@@ -138,7 +138,7 @@ class Workflow extends Component {
     // text:that.state.text
   })
   .then(function (response) {
-    alert("delted");
+  //  alert("delted");
     console.log(response);
 
  })
@@ -146,7 +146,7 @@ class Workflow extends Component {
     console.log(error);
   });
 
-     alert("Auto Save Enabled")
+    // alert("Auto Save Enabled")
      axios.post('http://localhost:6007/workflows/add',{
       creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,

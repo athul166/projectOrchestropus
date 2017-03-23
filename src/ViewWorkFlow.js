@@ -16,6 +16,7 @@ import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 var moment = require('moment');
 import Graph from './Graph';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 const customContentStyle = {
@@ -23,6 +24,9 @@ const customContentStyle = {
   maxWidth: 'none',
 };
 
+const style = {
+  margin: 12,
+};
 export default class ViewWorkFlow extends Component {
   constructor(){
     super();
@@ -45,7 +49,7 @@ export default class ViewWorkFlow extends Component {
      this.props.changeStatus();
    };
    componentDidMount(){
-     let jsonData = this.props.SelectedCard[0].workflows[0];
+     let jsonData = this.props.SelectedCard[0].workflows;
      console.log(jsonData);
      let nodes = [];
      let links = [];
@@ -144,9 +148,7 @@ export default class ViewWorkFlow extends Component {
                       style={{'margin-left':'20','padding': '4'}}/>
                 </Col>
                 <Col sm={1} md={1}>
-                  <IconButton onClick={this.handleCloseDialog}>
-                      <Close />
-                  </IconButton>
+                   <RaisedButton label="close" style={style} onClick={this.handleCloseDialog}/>
                 </Col>
              </Row>
              <Row style={{'margin-top':'10'}}>
@@ -158,7 +160,7 @@ export default class ViewWorkFlow extends Component {
               <Col sm={8} >
                tags:{tags}
               </Col>
-              <Col sm={3}>
+              <Col sm={2}>
                 <span style={{'float':'right'}}>{this.props.SelectedCard[0].downloads} downloads</span>
               </Col>
             </Row>
