@@ -3,8 +3,8 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Edit from 'material-ui/svg-icons/image/edit';
-import Close from 'material-ui/svg-icons/navigation/close';
+//import Edit from 'material-ui/svg-icons/image/edit';
+//  import Close from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 import Event from 'material-ui/svg-icons/action/event';
 import SearchLibrary from './SearchLibrary.js'
@@ -16,7 +16,8 @@ import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 var moment = require('moment');
 import Graph from './Graph';
-
+import Close from '../icons/close.png' ;
+import Edit from '../icons/edit.png';
 
 const customContentStyle = {
   width:'60%',
@@ -144,7 +145,7 @@ export default class ViewWorkFlow extends Component {
                 </Col>
                 <Col sm={1} md={1}>
                   <IconButton onClick={this.handleCloseDialog}>
-                      <Close />
+                    <img src={Close} alt='close'/>
                   </IconButton>
                 </Col>
              </Row>
@@ -164,13 +165,15 @@ export default class ViewWorkFlow extends Component {
             <Row style={{'margin-top':'10'}}>
               <Col sm={12}>
                   <Graph nodes={ this.state.nodes }
-                  links={ this.state.links } width={ 500 } height={ 400 } />
+                  links={ this.state.links } width={ 700 } height={ 400 } />
               </Col>
             </Row>
             <Row>
               <Col sm={11}>
                 <FloatingActionButton style={{'float':'right'}}>
-                  <Edit />
+                  <IconButton onClick={this.handleCloseDialog}>
+                    <img src={Edit} alt='edit'/>
+                  </IconButton>
                 </FloatingActionButton>
               </Col>
             </Row>

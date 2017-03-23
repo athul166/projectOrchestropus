@@ -30,25 +30,25 @@ import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
 import axios from 'axios';
 
 const style = {
-              styleCard:{
-                  height: 200,
-                  width: 280,
-                  margin: 5,
-                  display: 'inline-block',
-                  //whiteSpace: 'nowrap'
+          styleCard:{
+              height: 200,
+              width: 280,
+              margin: 5,
+              display: 'inline-block',
+              //whiteSpace: 'nowrap'
 
-               },
-               CardText:{
-                 whiteSpace:'nowrap',
-                 overflow:'hidden',
-                 position:'reative',
-                 display:'block'
-               },
-               CardText1:{
-                 marginLeft:5,
-                 //fontFamily:'Times New Roman',
-                 fontSize:13
-               }
+           },
+           CardText:{
+             whiteSpace:'nowrap',
+             overflow:'hidden',
+             position:'reative',
+             display:'block'
+           },
+           CardText1:{
+             marginLeft:5,
+             //fontFamily:'Times New Roman',
+             fontSize:13
+           }
      };
 
 
@@ -98,7 +98,7 @@ class CardComponent extends Component{
          <Container >
          <Row>
           <Row>
-          <Col sm={12}  >
+          <Col sm={12} style={{'paddingRight':0}} >
             <CardHeader
              title={item.workflow_name}
              subtitle={item.creator}

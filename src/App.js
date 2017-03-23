@@ -8,6 +8,7 @@ import Cards from './cards.js';
 import SearchLibrary from './SearchLibrary.js'
 import Home from './Home.js';
 import RaisedButton from 'material-ui/RaisedButton';
+import Monitor from './monitor/Monitor';
 
 const style = {
   margin: 12,
@@ -17,14 +18,14 @@ class App extends Component {
     super(props);
     this.state = {
       open: false,
-      pageStatus:true
+      pageStatus:''
     };
   }
   handleToggle = () => this.setState({open: !this.state.open});
 
-  handleClose(){
+  handleClose(value){
     this.setState({open: false});
-    this.setState({pageStatus : !this.state.pageStatus});
+    this.setState({pageStatus: value});
 }
   render() {
     return (
@@ -44,11 +45,14 @@ class App extends Component {
                 open={this.state.open}
                 onRequestChange={(open) => this.setState({open})}
               >
-              <MenuItem onTouchTap={this.handleClose.bind(this)}>Home  </MenuItem>
-              <MenuItem onTouchTap={this.handleClose.bind(this)}>Library</MenuItem>
+              <MenuItem onClick={this.handleClose.bind(this,'')}>Home  </MenuItem>
+              <MenuItem onClick={this.handleClose.bind(this,'library')}>Library</MenuItem>
+              <MenuItem onClick={this.handleClose.bind(this,'monitor')}>Monitor</MenuItem>
             </Drawer>
         </Paper>
-        {this.state.pageStatus ? <Home /> : <SearchLibrary /> }
+        {this.state.pageStatus===''? <Home />:<p></p>}
+        {this.state.pageStatus==='library'? <SearchLibrary />:<p></p>}
+        {this.state.pageStatus==='monitor'? <Monitor />:<p></p>}
       </div>
       </MuiThemeProvider>
     );

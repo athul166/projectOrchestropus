@@ -2,7 +2,7 @@
 var Languagepacks = require('../models/languagepack');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27018/workflowsandlanpacks');
+mongoose.connect('mongodb://localhost:27017/workflowsandlanpacks');
 
 // workflow seeder
 
