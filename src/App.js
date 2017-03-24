@@ -7,9 +7,10 @@ import MenuItem from 'material-ui/MenuItem';
 import Cards from './cards.js';
 import SearchLibrary from './SearchLibrary.js'
 import Home from './Home.js';
-import RaisedButton from 'material-ui/RaisedButton';  
+import RaisedButton from 'material-ui/RaisedButton';
 import Monitor from './monitor/Monitor';
 import { Router, Route, Link, hashHistory } from 'react-router';
+import Execute from './Execute'
 
 const style = {
   margin: 12,
@@ -49,11 +50,13 @@ class App extends Component {
               <MenuItem onClick={this.handleClose.bind(this,'')}>Home  </MenuItem>
               <MenuItem onClick={this.handleClose.bind(this,'library')}>Library</MenuItem>
               <MenuItem onClick={this.handleClose.bind(this,'monitor')}>Monitor</MenuItem>
+              <MenuItem onClick={this.handleClose.bind(this,'execute')}>Execute</MenuItem>
             </Drawer>
         </Paper>
         {this.state.pageStatus===''? <Home />:<p></p>}
         {this.state.pageStatus==='library'? <SearchLibrary />:<p></p>}
         {this.state.pageStatus==='monitor'? <Monitor />:<p></p>}
+        {this.state.pageStatus==='execute'? <Execute />:<p></p>}
       </div>
       </MuiThemeProvider>
     );
