@@ -10,6 +10,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Graph from './Graph';
 import axios from 'axios';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class Workflow extends Component {
   constructor(props) {
@@ -26,7 +28,9 @@ class Workflow extends Component {
       creatorName:'',
       workflowName:'',
       tags:'',
-      description:''
+      description:'',
+      open:false,
+      url:''
     }
     this.updateFilename=this.updateFilename.bind(this);
     this.showFileName=this.showFileName.bind(this);
@@ -249,7 +253,34 @@ class Workflow extends Component {
       this.setState({ nodes: [], links: [], statePresent: true});
   }
 }
+  handleOpen = () => {
+   this.setState({open: true});
+  };
 
+  handleClose = () => {
+   this.setState({open: false});
+  };
+
+  handleTest = () =>{
+    this.setState({open: false});
+    axios.post('http://localhost:4070/api/v1/jobs',{
+      payload : {
+        repoUrl : this.state.url
+      },
+      template: this.state.textChanged
+    })
+    .then(function(response){
+      console.log(response);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+}
+handleChangeUrl(evt)
+ {
+   this.setState({url:evt.target.value});
+   console.log(this.state.url);
+ }
   render() {
     var options = {
     lineNumbers: true,
@@ -258,6 +289,20 @@ class Workflow extends Component {
           mode: "text/x-yaml",
 
   }
+  const actions = [
+        <FlatButton
+          label="Cancel"
+          primary={true}
+          onTouchTap={this.handleClose}
+        />,
+        <FlatButton
+          label="Execute"
+          primary={true}
+          keyboardFocused={true}
+          onTouchTap={this.handleTest}
+        />,
+      ];
+
     const { width, height } = this.props;
     const styles = {
       graph: {
@@ -323,6 +368,16 @@ class Workflow extends Component {
                                       containerElement="label" primary={true}>
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
+                                <RaisedButton label="Test" onTouchTap={this.handleOpen} />
+                                <Dialog
+                                  title="Test"
+                                  actions={actions}
+                                  modal={false}
+                                  open={this.state.open}
+                                  onRequestClose={this.handleClose}
+                                >
+                                  <TextField hintText="Enter Git Repo Url" onChange={this.handleChangeUrl.bind(this)} style={{'width':'80%'}} /><br />
+                                </Dialog>
                                </div>
 
 

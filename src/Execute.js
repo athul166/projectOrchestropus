@@ -9,7 +9,18 @@ export default class Execute extends Component {
     super();
     this.state={
       url:'',
-      templateName:''
+      template:{
+                  "version": "1",
+                  "stages": {
+                    "git-clone": {
+                      "type": "stackroute/git/clone",
+                      "input": {
+                        "REPOSITORY_URL": "{{payload.repoUrl}}",
+                        "BRANCH": "master"
+                      }
+                    }
+                  }
+                }
     }
   }
   handleChangeUrl(evt)
@@ -23,11 +34,11 @@ export default class Execute extends Component {
       console.log(this.state.templateName);
     }
     handleRequest(){
-      axios.post('http://localhost:3000/api/v1/jobs',{
+      axios.post('http://localhost:4070/api/v1/jobs',{
         payload : {
           repoUrl : this.state.url
         },
-        templateName: this.state.templateName
+        template: this.state.template
       })
       .then(function(response){
         console.log(response);
