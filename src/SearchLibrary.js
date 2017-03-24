@@ -10,14 +10,19 @@ import CardComponent from './CardComponent.js';
 
 import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
 // just some icons for illustration (example only):
+import IconButton from 'material-ui/IconButton';
+
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import NewGameIcon from 'material-ui/svg-icons/av/playlist-add';
 import NewPageIcon from 'material-ui/svg-icons/action/note-add';
+import FontIcon from 'material-ui/FontIcon';
 import LanguagePack from './languagepack.js';
 import Workflow from './workflow.js';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
+import Add from '../icons/add.png' ;
+import Plus from '../icons/plus.png' ;
 
 const style = {
   width: '80%',
@@ -295,7 +300,9 @@ _onLanguage()
         <div>
            <SpeedDial
              fabContentOpen={
-               <ContentAdd />
+               <IconButton>
+                 <img src={Plus} />
+               </IconButton>
              }
              fabContentClose={
                <NavigationClose />
@@ -305,13 +312,13 @@ _onLanguage()
              <SpeedDialItem
 
                label="ADD WORKFLOW"
-               fabContent={<NewPageIcon/>}
+               fabContent={  <IconButton> <img src={Add} /> </IconButton>}
                onTouchTap={this._onButtonClick.bind(this)}
              />
 
              <SpeedDialItem
                label="ADD LANGUAGE PACK"
-               fabContent={<NewPageIcon/>}
+               fabContent={ <IconButton>  <img src={Add} /> </IconButton>}
                 onTouchTap={this._onLanguage.bind(this)}
 
              />
