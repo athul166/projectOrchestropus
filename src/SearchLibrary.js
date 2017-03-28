@@ -7,7 +7,6 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
 import CardComponent from './CardComponent.js';
-
 import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
 // just some icons for illustration (example only):
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -67,35 +66,35 @@ class SearchLibrary extends Component {
         .get("http://localhost:6007",)
         .then(function(result) {
           console.log("result is ");
-        console.log(result.data);
+          console.log(result.data);
           _this.setState({
             arr_div: result.data
           });
-console.log("state is "+_this.state.arr_div);
+          console.log("state is "+_this.state.arr_div);
         })
 
     }
 
- componentWillUnmount(){
-    this.serverRequest.abort();
-  }
+ // componentWillUnmount(){
+ //    this.serverRequest.abort();
+ //  }
 
  handleRequestDelete(i) {
     var arr=this.state.chipContent;
     arr.splice(i,1);
     this.setState({chipContent:arr});
-    if(this.state.chipContent.length==0)
-  {  alert("no searching item");
-  this.setState({new_arr:[]});
-}
+    if(this.state.chipContent.length==0){
+      alert("no searching item");
+      this.setState({new_arr:[]});
+    }
     else
     this.click();
-  }
-   handleTouchTap() {
-    alert('You clicked the Chip.');
-  }
+    }
+    handleTouchTap() {
+      alert('You clicked the Chip.');
+    }
 
-  handleToggle = () => this.setState({open: !this.state.open});
+    handleToggle = () => this.setState({open: !this.state.open});
 
 
 onClickGo(event)

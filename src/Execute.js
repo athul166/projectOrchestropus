@@ -9,18 +9,9 @@ export default class Execute extends Component {
     super();
     this.state={
       url:'',
-      template:{
-                  "version": "1",
-                  "stages": {
-                    "git-clone": {
-                      "type": "stackroute/git/clone",
-                      "input": {
-                        "REPOSITORY_URL": "{{payload.repoUrl}}",
-                        "BRANCH": "master"
-                      }
-                    }
-                  }
-                }
+      template : '',
+      templateName:''
+
     }
   }
   handleChangeUrl(evt)
@@ -38,7 +29,8 @@ export default class Execute extends Component {
         payload : {
           repoUrl : this.state.url
         },
-        template: this.state.template
+        template: null,
+        templateName: this.state.templateName
       })
       .then(function(response){
         console.log(response);

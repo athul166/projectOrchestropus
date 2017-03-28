@@ -267,7 +267,8 @@ class Workflow extends Component {
       payload : {
         repoUrl : this.state.url
       },
-      template: this.state.textChanged
+      template: this.state.textChanged,
+      templateName: null
     })
     .then(function(response){
       console.log(response);
