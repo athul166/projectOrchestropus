@@ -19,6 +19,8 @@ import Graph from './Graph';
 import Close from '../icons/close.png' ;
 import Edit from '../icons/edit.png';
 import RaisedButton from 'material-ui/RaisedButton';
+import Workflow from './workflow.js';
+import { Router, Route, Link, hashHistory } from 'react-router';
 
 const customContentStyle = {
   width:'60%',
@@ -35,7 +37,8 @@ export default class ViewWorkFlow extends Component {
       closeStatus:false,
       open:true,
       nodes: [],
-      links: []
+      links: [],
+      open_edit:false
     };
   }
   handleClose(){
@@ -44,6 +47,17 @@ export default class ViewWorkFlow extends Component {
     handleOpenDialog = () => {
      this.setState({open: true});
    };
+handleEdit = () => {
+  //alert("saasdsadadadsadsd");
+  this.setState({open_edit:true});
+  this.props.changeStatus();
+}
+
+
+
+
+
+
 
    handleCloseDialog = () => {
      this.setState({open: false});
@@ -51,7 +65,6 @@ export default class ViewWorkFlow extends Component {
    };
    componentDidMount(){
      let jsonData = this.props.SelectedCard[0].workflows;
-     console.log(jsonData);
      let nodes = [];
      let links = [];
      if(jsonData instanceof Object) {
@@ -95,6 +108,14 @@ export default class ViewWorkFlow extends Component {
                        links.push({ source: sourceIndex, target: targetIndex});
                      }
                    }
+                   if(flag) {
+                     this.setState({ statePresent: true, errorText: ''});
+                     // nodes.push({ name: targets[i]});
+                   }
+                   else { this.setState({ statePresent: false, errorText: targets[i].toString() }); }
+                 }
+                 else {
+                   this.setState({ statePresent: true, errorText: ''});
                  }
                }
              }
@@ -138,6 +159,8 @@ export default class ViewWorkFlow extends Component {
           // this.createJSON(this.props.SelectedCard[0].stages[0].stage);
           //console.log(this.state.nodes);
           return(
+          <div>  { this.state.open_edit?<Workflow />:
+            <div>
             <Dialog modal={true} open={this.state.open} contentStyle={customContentStyle} autoScrollBodyContent={true}>
             <Container style={{'paddingLeft':'0','paddingRight':'0'}}>
              <Row>
@@ -175,11 +198,11 @@ export default class ViewWorkFlow extends Component {
             </Row>
             <Row>
               <Col sm={11}>
-                <FloatingActionButton style={{'float':'right'}}>
-                  <IconButton onClick={this.handleCloseDialog}>
+                  <Link to="/workflow"><FloatingActionButton style={{'float':'right'}}>
+                <IconButton onClick={this.handleEdit}>
                     <img src={Edit} alt='edit'/>
                   </IconButton>
-                </FloatingActionButton>
+                </FloatingActionButton></Link>
               </Col>
             </Row>
             <Divider style={{'width':'100%','marginTop':'20'}}/>
@@ -195,6 +218,10 @@ export default class ViewWorkFlow extends Component {
             </Row>
             </Container>
             </Dialog>
+                    </div>}
+                    </div>
+
+
             );
         }
   }

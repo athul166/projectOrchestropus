@@ -73,7 +73,8 @@ new Workflows({
           "type": "stackroute/gruntjquery/git_clone",
           "input": {
             "REPOSITORY_URL": "{{payload.repoUrl}}",
-            "BRANCH": "{{payload.repo_ref}}"
+            "BRANCH": "{{payload.repo_ref}}",
+            "depends_on":null
           }
         },
         "build": {

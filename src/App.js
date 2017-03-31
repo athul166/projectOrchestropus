@@ -38,7 +38,7 @@ class App extends Component {
               title="Project"
               onLeftIconButtonTouchTap={this.handleToggle}
               style={{textAlign:'center'}}>
-            <RaisedButton label="Home" style={style} />
+            <Link to="/"><RaisedButton label="Home" style={style} /></Link>
               </AppBar>
 
               <Drawer
@@ -57,7 +57,9 @@ class App extends Component {
         {this.state.pageStatus==='library'? <SearchLibrary />:<p></p>}
         {this.state.pageStatus==='monitor'? <Monitor />:<p></p>}
         {this.state.pageStatus==='execute'? <Execute />:<p></p>}
+        {this.props.children}
       </div>
+
       </MuiThemeProvider>
     );
   }
