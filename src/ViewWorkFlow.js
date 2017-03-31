@@ -21,6 +21,7 @@ import Edit from '../icons/edit.png';
 import RaisedButton from 'material-ui/RaisedButton';
 import Workflow from './workflow.js';
 import { Router, Route, Link, hashHistory } from 'react-router';
+var YAML = require('json2yaml');
 
 const customContentStyle = {
   width:'60%',
@@ -31,13 +32,15 @@ const style = {
   margin: 12,
 };
 export default class ViewWorkFlow extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
       closeStatus:false,
       open:true,
       nodes: [],
       links: [],
+      url:'/workflow/'+this.props.SelectedCard[0],
+      ymldata:'',
       open_edit:false
     };
   }
@@ -65,6 +68,8 @@ handleEdit = () => {
    };
    componentDidMount(){
      let jsonData = this.props.SelectedCard[0].workflows;
+     console.log("json data ",jsonData);
+     console.log(YAML.stringify(jsonData));
      let nodes = [];
      let links = [];
      if(jsonData instanceof Object) {
@@ -127,6 +132,7 @@ handleEdit = () => {
    else {
        this.setState({ nodes: [], links: [], statePresent: true});
    }
+
  }
   render(){
         // const { width, height } = this.props;
@@ -139,6 +145,8 @@ handleEdit = () => {
           border: '1px solid #323232',
           }
         };
+        var jsonPayload = this.props.SelectedCard[0];
+        console.log('JSONPAYLOAD', JSON.stringify(jsonPayload));
           var tags="";
           var i=0;
           this.props.SelectedCard[0].tags.forEach((tag)=>{
@@ -151,6 +159,7 @@ handleEdit = () => {
             }
           });
           i=0;
+          var url="/workflow/"+this.props.SelectedCard[0].workflow_name;
           var id=this.props.SelectedCard[0]._id.toString().substring(0,8);
           var date = new Date( parseInt( id, 16 ) * 1000 );
           //console.log(date);
@@ -158,6 +167,7 @@ handleEdit = () => {
           // console.log(this.props.SelectedCard[0].stages[0].stage);
           // this.createJSON(this.props.SelectedCard[0].stages[0].stage);
           //console.log(this.state.nodes);
+
           return(
           <div>  { this.state.open_edit?<Workflow />:
             <div>
@@ -198,8 +208,8 @@ handleEdit = () => {
             </Row>
             <Row>
               <Col sm={11}>
-                  <Link to="/workflow"><FloatingActionButton style={{'float':'right'}}>
-                <IconButton onClick={this.handleEdit}>
+                  <Link to={url} params={{ templateName: "hello" }}><FloatingActionButton style={{'float':'right'}}>
+                  <IconButton onClick={this.handleCloseDialog}>
                     <img src={Edit} alt='edit'/>
                   </IconButton>
                 </FloatingActionButton></Link>

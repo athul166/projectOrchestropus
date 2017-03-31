@@ -20,6 +20,26 @@ var get=function(req,res){
 			}
 			else{
 					console.log("result of server ");
+					//console.log(docs);
+					res.json(docs);
+			}
+	})
+}
+
+
+
+
+var get1=function(req,res){
+	var name=req.query.name;
+	console.log("name   "+name);
+	
+ 	Workflow.find({"workflow_name":name},function(err,docs){
+    if(err){
+			res.status(500);
+			res.send("Internal errr");
+			}
+			else{
+					console.log("result of server ");
 					console.log(docs);
 					res.json(docs);
 			}
@@ -95,5 +115,6 @@ var add = function(req,res){
 module.exports={
   	 add:add,
   	get:get,
-		delete1:delete1
+		delete1:delete1,
+		get1:get1
   }
