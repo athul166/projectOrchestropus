@@ -4,6 +4,7 @@ var app = express();
 var searchRouter = require('./../routes/searchrouter');
 var deleteRouter = require('./../routes/deleteRouter');
 var addRouter = require('./../routes/addRouter');
+var getRouter = require('./../routes/getRouter');
 
 
 var mongoose = require('mongoose');
@@ -28,16 +29,17 @@ app.get('/',function(req,res){
 
 
 }else{
-	console.log(docs);
+	//console.log(docs);
     res.json(docs);
     }})
 });
 
 
 app.use('/workflows/add',addRouter);
+app.use('/workflows/get',getRouter);
 app.use('/workflows/delete',deleteRouter);
 app.use('/search',searchRouter);
 
 app.listen(6007,function(){
-    console.log("Started on PORT 6000");
+    console.log("Started on PORT 6007");
 })

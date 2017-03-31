@@ -19,6 +19,8 @@ import Graph from './Graph';
 import Close from '../icons/close.png' ;
 import Edit from '../icons/edit.png';
 import RaisedButton from 'material-ui/RaisedButton';
+var YAML = require('json2yaml');
+import {Link} from 'react-router';
 
 const customContentStyle = {
   width:'60%',
@@ -29,13 +31,15 @@ const style = {
   margin: 12,
 };
 export default class ViewWorkFlow extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
       closeStatus:false,
       open:true,
       nodes: [],
-      links: []
+      links: [],
+      url:'/workflow/'+this.props.SelectedCard[0],
+      ymldata:''
     };
   }
   handleClose(){
@@ -50,8 +54,49 @@ export default class ViewWorkFlow extends Component {
      this.props.changeStatus();
    };
    componentDidMount(){
+
+//     let json1=this.props.SelectedCard[0].workflows.stages;
+//     console.log("retrieved");
+//     console.log(json1);
+
+//     console.log("retrieved after stringify");
+//     console.log(JSON.stringify(json1));
+
+//    var result=[];
+//  for(var i in json1)
+//  {
+//   console.log(json1[i]);
+//     result.push([i, json1 [i]]);
+//  }
+
+
+// console.log("arrrrrrrrr   ",result.reverse());
+// console.log("now converted ",JSON.stringify(result));
+
+
+// var jsonObj=[];
+
+// for (var i=1;i<result.length;i++) {
+//     var tmp_values = [];
+//     for (var l=1;l<result[i].length;l++) { 
+//         tmp_values.push({label: result[0][l], value: result[i][l]}); //label + value respectively
+//     }
+//     jsonObj.push({key: result[i][0], values: tmp_values}); //key
+// }
+
+
+
+// console.log('jsonObj    ',jsonObj)
+
+
+
+
+
+
+
      let jsonData = this.props.SelectedCard[0].workflows;
-     console.log(jsonData);
+     console.log("json data ",jsonData);
+     console.log(YAML.stringify(jsonData));
      let nodes = [];
      let links = [];
      if(jsonData instanceof Object) {
@@ -106,6 +151,7 @@ export default class ViewWorkFlow extends Component {
    else {
        this.setState({ nodes: [], links: [], statePresent: true});
    }
+   
  }
   render(){
         // const { width, height } = this.props;
@@ -118,6 +164,8 @@ export default class ViewWorkFlow extends Component {
           border: '1px solid #323232',
           }
         };
+        var jsonPayload = this.props.SelectedCard[0];
+        console.log('JSONPAYLOAD', JSON.stringify(jsonPayload));
           var tags="";
           var i=0;
           this.props.SelectedCard[0].tags.forEach((tag)=>{
@@ -130,6 +178,7 @@ export default class ViewWorkFlow extends Component {
             }
           });
           i=0;
+          var url="/workflow/"+this.props.SelectedCard[0].workflow_name;
           var id=this.props.SelectedCard[0]._id.toString().substring(0,8);
           var date = new Date( parseInt( id, 16 ) * 1000 );
           //console.log(date);
@@ -137,6 +186,7 @@ export default class ViewWorkFlow extends Component {
           // console.log(this.props.SelectedCard[0].stages[0].stage);
           // this.createJSON(this.props.SelectedCard[0].stages[0].stage);
           //console.log(this.state.nodes);
+
           return(
             <Dialog modal={true} open={this.state.open} contentStyle={customContentStyle} autoScrollBodyContent={true}>
             <Container style={{'paddingLeft':'0','paddingRight':'0'}}>
@@ -175,11 +225,12 @@ export default class ViewWorkFlow extends Component {
             </Row>
             <Row>
               <Col sm={11}>
-                <FloatingActionButton style={{'float':'right'}}>
+               <Link to={url} params={{ templateName: "hello" }} ><FloatingActionButton style={{'float':'right'}}>
                   <IconButton onClick={this.handleCloseDialog}>
                     <img src={Edit} alt='edit'/>
                   </IconButton>
-                </FloatingActionButton>
+
+                </FloatingActionButton></Link>
               </Col>
             </Row>
             <Divider style={{'width':'100%','marginTop':'20'}}/>

@@ -10,6 +10,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Graph from './Graph';
 import axios from 'axios';
+var YAML = require('json2yaml');
+import SnackBar from 'react-material-snackbar';
+import Snackbar from 'material-ui/Snackbar';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import {  Link } from 'react-router';
 
 class Workflow extends Component {
   constructor(props) {
@@ -26,13 +32,40 @@ class Workflow extends Component {
       creatorName:'',
       workflowName:'',
       tags:'',
-      description:''
+      description:'',
+      clearFunc:'',
+      showSnack:false,
+      open: false,
+      obj:{},
+      open_ok:false
     }
     this.updateFilename=this.updateFilename.bind(this);
     this.showFileName=this.showFileName.bind(this);
     this.setFocus=this.setFocus.bind(this);
     this.save=this.save.bind(this);
+    this.handleRequestClose=this.handleRequestClose.bind(this);
+    this.addUpload=this.addUpload.bind(this);
+    this.handleOk=this.handleOk.bind(this);
+    console.log("props  ",this.props); 
+
+
+
   }
+
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
+  handleRequestClose() {
+    this.setState({
+      showSnack: false,
+    });
+  };
+
   twoFunc(e) {
     this.showFileName(e);
     setTimeout(this.setFocus,100);
@@ -93,9 +126,81 @@ class Workflow extends Component {
   }
 
 
+
+handleOk()
+{
+
+}
+
   componentDidMount() {
-       setInterval(this.save, 12000);
+     var that=this;
+     var c=0;
+     
+     if(this.props.params!=undefined)
+     {
+      console.log("yes")
+      console.log("obj is ",this.props.params.templateName);
+    axios.get('http://localhost:6007/workflows/get?name='+this.props.params.templateName,)
+  .then(function (response) {
+    console.log("data is "+response);
+    that.setState({obj:response.data[0]});
+    console.log("obj is ",that.state.obj);
+ console.log("name is ",that.state.obj.workflow_name);
+   let jsonData = that.state.obj.workflows;
+     console.log(jsonData);
+     console.log(YAML.stringify(jsonData));
+     that.setState({text:YAML.stringify(jsonData),creatorName:that.state.obj.creator,workflowName:that.state.obj.workflow_name,description:that.state.obj.description,tags:that.state.obj.tags})
+
+
+ })
+  .catch(function (error) {
+    console.log(error);
+  });
+     
+
+
+}
+else
+{
+  console.log("not")
+  console.log(this.state.obj);
+  this.setState({obj:null})
+}
+
+ var clearFunc = setInterval(this.save, 8000);
+       this.setState({clearFunc:clearFunc});
+
     }
+
+ // componentWillmount(){
+ //   var that=this;
+ //      console.log("obj is ");
+
+ //    axios.get('http://localhost:6007/workflows/get',{
+  
+ //    workflowName: that.props.params.templateName
+   
+ //  })
+ //  .then(function (response) {
+ //    console.log(response);
+ //  this.setState({obj:response});
+ //    console.log("obj is ",this.state.obj);
+
+
+ // })
+ //  .catch(function (error) {
+ //    console.log(error);
+ //  });
+
+ // }
+
+
+  componentWillUnmount(){
+     
+  // console.log("obj is ",this.state.obj);
+
+    clearInterval(this.state.clearFunc);
+  }
 
 
     save(){
@@ -105,31 +210,35 @@ class Workflow extends Component {
 
       //this.setState({creatorName:c});
     //  console.log(this.state.creatorName);
+    console.log("in save")
       var that=this;
      // var creator=this.state.creatorName;
       //alert(this.state.creatorName);
   if(this.state.creatorName=='')
   {
-  //  alert("Creator Name Can't be empty");
+   // alert("Creator Name Can't be empty");
   }else
   if(this.state.workflowName=='')
   {
-    // alert("Workflow Name Can't be empty")
+     //alert("Workflow Name Can't be empty")
   }else
   if(this.state.tags=='')
   {
-    // alert("Tags Can't be empty")
+     //alert("Tags Can't be empty")
   }else
   if(this.state.description=='')
   {
-    // alert("Descripion Can't be empty")
+     //alert("Descripion Can't be empty")
   }else
   if(this.state.text=='')
   {
-    //   alert("Workflow File Can't be empty")
+       //alert("Workflow File Can't be empty")
   }
   else
   {
+      this.setState({showSnack:true});
+      //alert("Auto Save Enabled");
+     
     axios.post('http://localhost:6007/workflows/delete',{
    // creatorName: that.state.creatorName,
     workflowName: that.state.workflowName,
@@ -146,7 +255,7 @@ class Workflow extends Component {
     console.log(error);
   });
 
-    // alert("Auto Save Enabled")
+    
      axios.post('http://localhost:6007/workflows/add',{
       creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,
@@ -164,6 +273,28 @@ class Workflow extends Component {
   }
     }
 
+    addUpload(){
+      var that = this;
+       axios.post('http://35.154.207.12/workflow/add',{
+       creatorName: that.state.creatorName,
+      workflowName: that.state.workflowName,
+      tags:that.state.tags,
+      description:that.state.description,
+      text:that.state.text
+    })
+    .then(function (response) {
+      console.log(response);
+       that.setState({open_ok:true});
+       alert("added");
+
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+   
+
+    }
 
     onCreator(event)
     {
@@ -176,12 +307,14 @@ class Workflow extends Component {
     }
     onTags(event)
     {
-    this.setState({tags:event.target.value});
+    this.setState({tags: event.target.value});
     }
     onDesc(event)
     {
     this.setState({description:event.target.value});
     }
+
+
 
 
   createJSON() {
@@ -251,6 +384,31 @@ class Workflow extends Component {
 }
 
   render() {
+    const actions = [
+      <FlatButton
+        label="NO"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="YES"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.addUpload}
+      />,
+    ];
+
+    const actions_ok = [
+    
+      <FlatButton
+        label="Ok"
+        primary={true}
+        onTouchTap={this.handleOk}
+      />,
+    ];
+  //  console.log("propsssssssssssssssss");
+  // //  console.log(this.props.params.userId);
+  //   console.log('inside workflow');
     var options = {
     lineNumbers: true,
     gutters: ["CodeMirror-lint-markers"],
@@ -270,6 +428,9 @@ class Workflow extends Component {
      button: {
       margin: 20,
       },
+       button1: {
+      margin: 8,
+      },
      exampleImageInput: {
       cursor: 'pointer',
       position: 'absolute',
@@ -286,7 +447,20 @@ class Workflow extends Component {
 };
 
     return (
+     <div> {this.state.obj==null?
       <div className="App">
+      
+      
+       <Snackbar
+          open={this.state.showSnack}
+          message="Auto Save Enabled"
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose}
+        />
+      
+
+
+
        <MuiThemeProvider>
       <GridList cellHeight="auto" cols={2} style={{marginTop:"2%"}}>
         <GridTile>
@@ -323,17 +497,90 @@ class Workflow extends Component {
                                       containerElement="label" primary={true}>
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
+                                 <RaisedButton label="Test"   />
+                                   <RaisedButton label="Upload"  style={styles.button1} onTouchTap={this.handleOpen}/>
+                                    <Dialog
+                                          title="Are You Sure You Want To Upload This Workflow ?"
+                                          actions={actions}
+                                          modal={true}
+                                          open={this.state.open}
+                                        >
+                                    </Dialog>
+      {this.state.open_ok? <Dialog
+                                          title="Successfully uploaded"
+                                          actions={actions_ok}
+                                          modal={true}
+                                          open={this.state.open_ok}
+                                        >
+                                    </Dialog>:<p></p>}
                                </div>
 
 
         </GridTile>
       <GridTile style={{height:"650px",marginTop:"0%"}}>
-        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={ this.props.width } height={ this.props.height } />
+        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={ 700} height={ 630 } />
          </GridTile>
          </GridList>
 
            </MuiThemeProvider>
-      </div>
+      </div> :
+       <div className="App">
+         <Snackbar
+          open={this.state.showSnack}
+          message="Auto Saved"
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose}
+        />
+      
+       <MuiThemeProvider>
+      <GridList cellHeight="auto" cols={2} style={{marginTop:"2%"}}>
+        <GridTile>
+          <div >
+          <input type = 'text' id = 'creatorName'    onChange={this.onCreator.bind(this)} value={this.state.creatorName} style={{'border':0,'fontSize':'18'}} /> /
+           <input type = 'text' id = 'workflowName'  onChange={this.onName.bind(this)} value={this.state.workflowName}style={{'border':0,'fontSize':'18'}} />
+ <br/>
+          < input type = 'text' id = 'tags' name = 'Tags' onChange={this.onTags.bind(this)} value={this.state.obj.tags} style={{'border':0,'fontSize':'18'}} /><br/>
+          <textarea type='textarea' id = 'description' rows={2} cols={50}  onChange={this.onDesc.bind(this)} value={this.state.description}  style={{'border':0,'fontSize':'18'}}/>
+ <br/><br/>
+          </div>
+          <div >
+          <CodeMirror ref="editor" onChange={this.handleChange.bind(this)} value={this.state.text}  options={options} />
+          <textarea type='textarea' rows={45} cols={80} value={ this.state.textChanged } style={{'display':'none'}}/>
+
+           </div>
+           <div>
+           <br/>
+          {this.state.statePresent ? <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={this.state.errorText} id='text_area'/> : <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={"Warning: "+this.state.errorText+" is not present"} id='text_area1'/>}
+                   </div>
+
+                             <div style={{marginLeft:"1%"}}>
+                                <TextField
+                                      hintText="Enter File Name"
+                                      floatingLabelFixed={true}
+                                      value={this.state.filename}
+                                      onChange={this.updateFilename}
+                                />
+                                <RaisedButton
+                                      id="browsewf"
+                                      label="Browse"
+                                      labelPosition="before"
+                                      style={styles.button}
+                                      containerElement="label" primary={true}>
+                                       <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
+                                </RaisedButton>
+                                   <RaisedButton label="Test"  />
+                                   <RaisedButton label="Upload"  />
+                               </div>
+
+
+        </GridTile>
+      <GridTile style={{height:"650px",marginTop:"0%"}}>
+        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={ 700} height={ 630 } />
+         </GridTile>
+         </GridList>
+
+           </MuiThemeProvider>
+      </div>}</div>
     );
   }
 }
