@@ -38,6 +38,7 @@ class App extends Component {
               onLeftIconButtonTouchTap={this.handleToggle}
               style={{textAlign:'center'}}>
             <Link to={'/home'}><RaisedButton label="Home" style={style} /></Link>
+
               </AppBar>
 
               <Drawer

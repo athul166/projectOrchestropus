@@ -18,9 +18,11 @@ var moment = require('moment');
 import Graph from './Graph';
 import Close from '../icons/close.png' ;
 import Edit from '../icons/edit.png';
+import Workflow from './workflow.js';
+import { Router, Route, Link, hashHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 var YAML = require('json2yaml');
-import {Link} from 'react-router';
+
 
 const customContentStyle = {
   width:'60%',
@@ -39,7 +41,8 @@ export default class ViewWorkFlow extends Component {
       nodes: [],
       links: [],
       url:'/workflow/'+this.props.SelectedCard[0],
-      ymldata:''
+      ymldata:'',
+      open_edit:false
     };
   }
   handleClose(){
@@ -48,52 +51,23 @@ export default class ViewWorkFlow extends Component {
     handleOpenDialog = () => {
      this.setState({open: true});
    };
+handleEdit = () => {
+  //alert("saasdsadadadsadsd");
+  this.setState({open_edit:true});
+  this.props.changeStatus();
+}
+
+
+
+
+
+
 
    handleCloseDialog = () => {
      this.setState({open: false});
      this.props.changeStatus();
    };
    componentDidMount(){
-
-//     let json1=this.props.SelectedCard[0].workflows.stages;
-//     console.log("retrieved");
-//     console.log(json1);
-
-//     console.log("retrieved after stringify");
-//     console.log(JSON.stringify(json1));
-
-//    var result=[];
-//  for(var i in json1)
-//  {
-//   console.log(json1[i]);
-//     result.push([i, json1 [i]]);
-//  }
-
-
-// console.log("arrrrrrrrr   ",result.reverse());
-// console.log("now converted ",JSON.stringify(result));
-
-
-// var jsonObj=[];
-
-// for (var i=1;i<result.length;i++) {
-//     var tmp_values = [];
-//     for (var l=1;l<result[i].length;l++) { 
-//         tmp_values.push({label: result[0][l], value: result[i][l]}); //label + value respectively
-//     }
-//     jsonObj.push({key: result[i][0], values: tmp_values}); //key
-// }
-
-
-
-// console.log('jsonObj    ',jsonObj)
-
-
-
-
-
-
-
      let jsonData = this.props.SelectedCard[0].workflows;
      console.log("json data ",jsonData);
      console.log(YAML.stringify(jsonData));
@@ -140,6 +114,14 @@ export default class ViewWorkFlow extends Component {
                        links.push({ source: sourceIndex, target: targetIndex});
                      }
                    }
+                   if(flag) {
+                     this.setState({ statePresent: true, errorText: ''});
+                     // nodes.push({ name: targets[i]});
+                   }
+                   else { this.setState({ statePresent: false, errorText: targets[i].toString() }); }
+                 }
+                 else {
+                   this.setState({ statePresent: true, errorText: ''});
                  }
                }
              }
@@ -188,6 +170,8 @@ export default class ViewWorkFlow extends Component {
           //console.log(this.state.nodes);
 
           return(
+          <div>  { this.state.open_edit?<Workflow />:
+            <div>
             <Dialog modal={true} open={this.state.open} contentStyle={customContentStyle} autoScrollBodyContent={true}>
             <Container style={{'paddingLeft':'0','paddingRight':'0'}}>
              <Row>
@@ -225,11 +209,10 @@ export default class ViewWorkFlow extends Component {
             </Row>
             <Row>
               <Col sm={11}>
-               <Link to={url} params={{ templateName: "hello" }} ><FloatingActionButton style={{'float':'right'}}>
+               <Link to={url} params={{ templateName: "hello" }}><FloatingActionButton style={{'float':'right'}}>
                   <IconButton onClick={this.handleCloseDialog}>
                     <img src={Edit} alt='edit'/>
                   </IconButton>
-
                 </FloatingActionButton></Link>
               </Col>
             </Row>
@@ -246,6 +229,10 @@ export default class ViewWorkFlow extends Component {
             </Row>
             </Container>
             </Dialog>
+                    </div>}
+                    </div>
+
+
             );
         }
   }
