@@ -26,5 +26,11 @@ var workflows = new Schema({
         version: {type: String, required: true},
         stages: {type: {}, required: true}
     }
-});
+
+}, {retainKeyOrder: true});
 module.exports= mongoose.model('Workflows', workflows,"workflows");
+
+
+
+
+

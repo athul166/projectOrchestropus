@@ -9,7 +9,7 @@ import SearchLibrary from './SearchLibrary.js'
 import Home from './Home.js';
 import RaisedButton from 'material-ui/RaisedButton';
 import Monitor from './monitor/Monitor';
-import { Router, Route, Link, hashHistory } from 'react-router';
+import {  Link } from 'react-router';
 import Execute from './Execute'
 
 const style = {
@@ -33,12 +33,12 @@ class App extends Component {
     return (
       <MuiThemeProvider>
       <div>
-        <Paper>
             <AppBar
               title="Project"
               onLeftIconButtonTouchTap={this.handleToggle}
               style={{textAlign:'center'}}>
-            <RaisedButton label="Home" style={style} />
+            <Link to={'/home'}><RaisedButton label="Home" style={style} /></Link>
+
               </AppBar>
 
               <Drawer
@@ -47,16 +47,12 @@ class App extends Component {
                 open={this.state.open}
                 onRequestChange={(open) => this.setState({open})}
               >
-              <MenuItem onClick={this.handleClose.bind(this,'home')}>Home  </MenuItem>
-              <MenuItem onClick={this.handleClose.bind(this,'library')}>Library</MenuItem>
-              <MenuItem onClick={this.handleClose.bind(this,'monitor')}>Monitor</MenuItem>
-              <MenuItem onClick={this.handleClose.bind(this,'execute')}>Execute</MenuItem>
+              <Link to={'/home'}><MenuItem onClick={this.handleClose.bind(this,'home')}>Home  </MenuItem></Link>
+              <Link to={'/library'}><MenuItem onClick={this.handleClose.bind(this,'library')}>Library</MenuItem></Link>
+              <Link to={'/monitor'}><MenuItem onClick={this.handleClose.bind(this,'monitor')}>Monitor</MenuItem></Link>
+              <Link to={'/execute'}><MenuItem onClick={this.handleClose.bind(this,'execute')}>Execute</MenuItem></Link>
             </Drawer>
-        </Paper>
-        {this.state.pageStatus==='home'? <Home />:<p></p>}
-        {this.state.pageStatus==='library'? <SearchLibrary />:<p></p>}
-        {this.state.pageStatus==='monitor'? <Monitor />:<p></p>}
-        {this.state.pageStatus==='execute'? <Execute />:<p></p>}
+            {this.props.children}
       </div>
       </MuiThemeProvider>
     );
@@ -64,3 +60,10 @@ class App extends Component {
 }
 
 export default App;
+
+
+
+            // {this.state.pageStatus==='home'? <Home />:null}
+            // {this.state.pageStatus==='library'? <SearchLibrary />:null}
+            // {this.state.pageStatus==='monitor'? <Monitor />:null}
+            // {this.state.pageStatus==='execute'? <Execute />:null}

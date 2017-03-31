@@ -63,10 +63,15 @@ class CardComponent extends Component{
     };
   }
   onClickCardToNext(item){
+    console.log(item,"item");
+   // this.props.Card(2);
     this.setState({isEditing:true});
     var card=this.state.SelectedCard;
     card.push(item);
     this.setState({SelectedCard:card});
+
+
+    //this.props.getcard(item);
   }
   onCloseHandle(){
     this.setState({isEditing:false});

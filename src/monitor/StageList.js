@@ -33,7 +33,6 @@ class StageList extends Component {
     this.setState({
       results:Results
     });
-
   }
 
   render() {

@@ -18,7 +18,11 @@ var moment = require('moment');
 import Graph from './Graph';
 import Close from '../icons/close.png' ;
 import Edit from '../icons/edit.png';
+import Workflow from './workflow.js';
+import { Router, Route, Link, hashHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
+var YAML = require('json2yaml');
+
 
 const customContentStyle = {
   width:'60%',
@@ -29,13 +33,16 @@ const style = {
   margin: 12,
 };
 export default class ViewWorkFlow extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
       closeStatus:false,
       open:true,
       nodes: [],
-      links: []
+      links: [],
+      url:'/workflow/'+this.props.SelectedCard[0],
+      ymldata:'',
+      open_edit:false
     };
   }
   handleClose(){
@@ -44,6 +51,17 @@ export default class ViewWorkFlow extends Component {
     handleOpenDialog = () => {
      this.setState({open: true});
    };
+handleEdit = () => {
+  //alert("saasdsadadadsadsd");
+  this.setState({open_edit:true});
+  this.props.changeStatus();
+}
+
+
+
+
+
+
 
    handleCloseDialog = () => {
      this.setState({open: false});
@@ -51,7 +69,8 @@ export default class ViewWorkFlow extends Component {
    };
    componentDidMount(){
      let jsonData = this.props.SelectedCard[0].workflows;
-     console.log(jsonData);
+     console.log("json data ",jsonData);
+     console.log(YAML.stringify(jsonData));
      let nodes = [];
      let links = [];
      if(jsonData instanceof Object) {
@@ -95,6 +114,14 @@ export default class ViewWorkFlow extends Component {
                        links.push({ source: sourceIndex, target: targetIndex});
                      }
                    }
+                   if(flag) {
+                     this.setState({ statePresent: true, errorText: ''});
+                     // nodes.push({ name: targets[i]});
+                   }
+                   else { this.setState({ statePresent: false, errorText: targets[i].toString() }); }
+                 }
+                 else {
+                   this.setState({ statePresent: true, errorText: ''});
                  }
                }
              }
@@ -106,6 +133,7 @@ export default class ViewWorkFlow extends Component {
    else {
        this.setState({ nodes: [], links: [], statePresent: true});
    }
+
  }
   render(){
         // const { width, height } = this.props;
@@ -118,6 +146,8 @@ export default class ViewWorkFlow extends Component {
           border: '1px solid #323232',
           }
         };
+        var jsonPayload = this.props.SelectedCard[0];
+        console.log('JSONPAYLOAD', JSON.stringify(jsonPayload));
           var tags="";
           var i=0;
           this.props.SelectedCard[0].tags.forEach((tag)=>{
@@ -130,6 +160,7 @@ export default class ViewWorkFlow extends Component {
             }
           });
           i=0;
+          var url="/workflow/"+this.props.SelectedCard[0].workflow_name;
           var id=this.props.SelectedCard[0]._id.toString().substring(0,8);
           var date = new Date( parseInt( id, 16 ) * 1000 );
           //console.log(date);
@@ -137,7 +168,10 @@ export default class ViewWorkFlow extends Component {
           // console.log(this.props.SelectedCard[0].stages[0].stage);
           // this.createJSON(this.props.SelectedCard[0].stages[0].stage);
           //console.log(this.state.nodes);
+
           return(
+          <div>  { this.state.open_edit?<Workflow />:
+            <div>
             <Dialog modal={true} open={this.state.open} contentStyle={customContentStyle} autoScrollBodyContent={true}>
             <Container style={{'paddingLeft':'0','paddingRight':'0'}}>
              <Row>
@@ -175,11 +209,11 @@ export default class ViewWorkFlow extends Component {
             </Row>
             <Row>
               <Col sm={11}>
-                <FloatingActionButton style={{'float':'right'}}>
+               <Link to={url} params={{ templateName: "hello" }}><FloatingActionButton style={{'float':'right'}}>
                   <IconButton onClick={this.handleCloseDialog}>
                     <img src={Edit} alt='edit'/>
                   </IconButton>
-                </FloatingActionButton>
+                </FloatingActionButton></Link>
               </Col>
             </Row>
             <Divider style={{'width':'100%','marginTop':'20'}}/>
@@ -195,6 +229,10 @@ export default class ViewWorkFlow extends Component {
             </Row>
             </Container>
             </Dialog>
+                    </div>}
+                    </div>
+
+
             );
         }
   }

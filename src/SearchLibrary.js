@@ -7,16 +7,22 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
 import CardComponent from './CardComponent.js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
 // just some icons for illustration (example only):
+import IconButton from 'material-ui/IconButton';
+
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import NewGameIcon from 'material-ui/svg-icons/av/playlist-add';
 import NewPageIcon from 'material-ui/svg-icons/action/note-add';
+import FontIcon from 'material-ui/FontIcon';
 import LanguagePack from './languagepack.js';
 import Workflow from './workflow.js';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
+import Add from '../icons/add.png' ;
+import Plus from '../icons/plus.png' ;
 
 const style = {
   width: '80%',
@@ -56,7 +62,9 @@ class SearchLibrary extends Component {
       new_arr:[],
        showComponent: false,
        status:'',
-       d3_status:false
+       d3_status:false,
+       selectedCard:[],
+       new_arr_online:[]
     };
   }
   componentDidMount(){
@@ -73,12 +81,20 @@ class SearchLibrary extends Component {
           console.log("state is "+_this.state.arr_div);
         })
 
+
+         this.serverRequest =
+      axios
+        .get("http://35.154.207.12/workflow/get",)
+        .then(function(result) {
+          console.log("result is ");
+        console.log(result.data);
+          _this.setState({
+            new_arr_online: result.data
+          });
+console.log("state is "+_this.state.new_arr_online);
+        })
+
     }
-
- // componentWillUnmount(){
- //    this.serverRequest.abort();
- //  }
-
  handleRequestDelete(i) {
     var arr=this.state.chipContent;
     arr.splice(i,1);
@@ -118,6 +134,29 @@ onClickGo(event)
         });
   console.log("state is "+_this.state.arr_div);
       })
+
+
+var url="http://localhost:6007/search?search_item="+t;
+  this.serverRequest =
+    axios
+      .get(url)
+      .then(function(result) {
+        console.log("result is ");
+       console.log("online",result.data);
+        _this.setState({
+          new_arr: result.data
+        });
+  console.log("state is "+_this.state.arr_div);
+      })
+
+
+
+
+
+
+
+
+
 this.setState({value:''});
 
 }
@@ -213,6 +252,18 @@ handleEnter(event){
   }
 }
 
+
+// getcard(cardValue)
+// {
+
+//   console.log(cardValue,"inside getcard");
+//     // var card=this.state.selectedCard;
+//     // card.push(cardValue);
+//     // console.log(cardValue);
+//     // this.setState({selectedCard:cardValue});
+
+// }
+
 _onLanguage()
 {
   alert("lkldsfsdfsdfsdfsdfsdfsdfsdfsdfdf");
@@ -271,19 +322,22 @@ _onLanguage()
           <div style={{'position':'absolute','width':'40%','margin-left': '374','display':'-webkit-box'}}>{items}</div>
       </Row>
       <Tabs style={{'marginTop':'40'}}>
-          <Tab label="Local Repo">
+          <Tab label="Online Repo">
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                All the downloaded files.
+                 {status2 ? <CardComponent pageData={this.state.new_arr_online}/> : <CardComponent pageData={this.state.new_arr_online.reverse()} /> }
+
             </div>
           </Tab>
-          <Tab label="Online Repo" >
+          <Tab label="Local Repo" >
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
+                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()} /> }
             </div>
           </Tab>
+
+
           <Tab label="Recommended" >
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()}/> }
+                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent  pageData={this.state.new_arr.reverse()} /> }
             </div>
           </Tab>
       </Tabs>
@@ -294,7 +348,9 @@ _onLanguage()
         <div>
            <SpeedDial
              fabContentOpen={
-               <ContentAdd />
+               <IconButton>
+                 <img src={Plus} />
+               </IconButton>
              }
              fabContentClose={
                <NavigationClose />
@@ -304,13 +360,13 @@ _onLanguage()
              <SpeedDialItem
 
                label="ADD WORKFLOW"
-               fabContent={<NewPageIcon/>}
+               fabContent={  <IconButton> <img src={Add} /> </IconButton>}
                onTouchTap={this._onButtonClick.bind(this)}
              />
 
              <SpeedDialItem
                label="ADD LANGUAGE PACK"
-               fabContent={<NewPageIcon/>}
+               fabContent={ <IconButton>  <img src={Add} /> </IconButton>}
                 onTouchTap={this._onLanguage.bind(this)}
 
              />
@@ -325,8 +381,6 @@ _onLanguage()
 
 
 </div>
-
-
 
     );
   }

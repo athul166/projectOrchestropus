@@ -13,8 +13,8 @@ var workflow =[
   description : 'For server side JS CI',
   tags : ['js','javascript','eslint','istanbul','mocha'],
   workflows : {
-    version : '1',
-    stages : {
+    "version" : "1",
+    "stages" : {
         "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
@@ -67,13 +67,14 @@ new Workflows({
   description : 'For server side JS CI',
   tags : ['js','javascript','grunt','eslint'],
   workflows : {
-    version : '1',
-    stages : {
+    "version" : "1",
+    "stages" : {
         "gitClone": {
           "type": "stackroute/gruntjquery/git_clone",
           "input": {
             "REPOSITORY_URL": "{{payload.repoUrl}}",
-            "BRANCH": "{{payload.repo_ref}}"
+            "BRANCH": "{{payload.repo_ref}}",
+            "depends_on":null
           }
         },
         "build": {
@@ -107,8 +108,8 @@ new Workflows({
   description : 'For server side JS CI',
   tags : ['js','javascript','gulp','eslint','gulpistanbul'],
   workflows : {
-    version : '1',
-    stages :{
+    "version" : "1",
+    "stages" :{
       "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
@@ -161,8 +162,8 @@ new Workflows({
   description : 'For server side JS CI',
   tags : ['js','javascript','grunt','eslint','testing'],
   workflows : {
-    version : '1',
-    stages :{
+    "version" : "1",
+    "stages" :{
         "gitClone": {
           "type": "stackroute/js/git_clone",
           "input": {
@@ -201,8 +202,8 @@ new Workflows({
   description : 'For server side JS CI',
   tags : ['js','javascript','eslint'],
   workflows : {
-    version : '1',
-    stages :{
+    "version" : "1",
+    "stages" :{
       "gitClone": {
         "type": "stackroute/js/git_clone",
         "input": {
