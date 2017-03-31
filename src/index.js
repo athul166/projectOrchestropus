@@ -5,7 +5,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // import { browserHistory } from 'react-router';
 import App from './App';
 import Workflow from './workflow';
-import { Router, Route, browserHistory,hashHistory,IndexRoute} from 'react-router';
+import { Router, Route,hashHistory,IndexRoute} from 'react-router';
 import LanguagePack from './languagepack';
 import Home from './Home';
 import Execute from './Execute';

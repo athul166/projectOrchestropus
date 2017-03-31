@@ -6,7 +6,6 @@ import FontIcon from 'material-ui/FontIcon';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 
-
 import {
   blue300,
   indigo900,
@@ -70,8 +69,8 @@ class CardComponent extends Component{
     var card=this.state.SelectedCard;
     card.push(item);
     this.setState({SelectedCard:card});
-   
-   
+
+
     //this.props.getcard(item);
   }
   onCloseHandle(){
@@ -107,7 +106,6 @@ class CardComponent extends Component{
              avatar={<Avatar>WF</Avatar>}
            />
          </Col>
-
         </Row>
       <Row>
        <CardText style={style.CardText1}>

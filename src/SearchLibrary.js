@@ -9,7 +9,6 @@ import Divider from 'material-ui/Divider';
 import CardComponent from './CardComponent.js';
 import CardComponent_online from './CardComponent_online.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
 // just some icons for illustration (example only):
 import IconButton from 'material-ui/IconButton';
@@ -77,11 +76,11 @@ class SearchLibrary extends Component {
         .get("http://localhost:6007",)
         .then(function(result) {
           console.log("result is ");
-        console.log(result.data);
+          console.log(result.data);
           _this.setState({
             arr_div: result.data
           });
-console.log("state is "+_this.state.arr_div);
+          console.log("state is "+_this.state.arr_div);
         })
 
 
@@ -98,25 +97,22 @@ console.log("state is "+_this.state.new_arr_online);
         })
 
     }
-
-
-
  handleRequestDelete(i) {
     var arr=this.state.chipContent;
     arr.splice(i,1);
     this.setState({chipContent:arr});
-    if(this.state.chipContent.length==0)
-  {  alert("no searching item");
-  this.setState({new_arr:[]});
-}
+    if(this.state.chipContent.length==0){
+      alert("no searching item");
+      this.setState({new_arr:[]});
+    }
     else
     this.click();
-  }
-   handleTouchTap() {
-    alert('You clicked the Chip.');
-  }
+    }
+    handleTouchTap() {
+      alert('You clicked the Chip.');
+    }
 
-  handleToggle = () => this.setState({open: !this.state.open});
+    handleToggle = () => this.setState({open: !this.state.open});
 
 
 onClickGo(event)
@@ -332,6 +328,7 @@ _onLanguage()
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
                  {status2 ? <CardComponent_online  pageData={this.state.arr_div_online}/> : <CardComponent_online  pageData={this.state.new_arr_online.reverse()} /> }
        
+
             </div>
           </Tab>
           <Tab label="Local Repo" >
