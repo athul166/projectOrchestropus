@@ -400,11 +400,11 @@ else
 
     const actions_ok = [
     
-      <FlatButton
+      <Link to={'/workflows'}><FlatButton
         label="Ok"
         primary={true}
         onTouchTap={this.handleOk}
-      />,
+      />,</Link>
     ];
   //  console.log("propsssssssssssssssss");
   // //  console.log(this.props.params.userId);
@@ -482,13 +482,8 @@ else
           {this.state.statePresent ? <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={this.state.errorText} id='text_area'/> : <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={"Warning: "+this.state.errorText+" is not present"} id='text_area1'/>}
                    </div>
 
-                             <div style={{marginLeft:"1%"}}>
-                                <TextField
-                                      hintText="Enter File Name"
-                                      floatingLabelFixed={true}
-                                      value={this.state.filename}
-                                      onChange={this.updateFilename}
-                                />
+                             <div style={{marginLeft:"0%"}}>
+                                
                                 <RaisedButton
                                       id="browsewf"
                                       label="Browse"

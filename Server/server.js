@@ -6,6 +6,8 @@ var deleteRouter = require('./../routes/deleteRouter');
 var addRouter = require('./../routes/addRouter');
 var getRouter = require('./../routes/getRouter');
 
+var addGitRouter = require('./../routes/addGitRouter');
+var addLangRouter = require('./../routes/addLangRouter');
 
 var mongoose = require('mongoose');
 var Workflow = require('./../models/workflow');
@@ -40,6 +42,10 @@ app.use('/workflows/get',getRouter);
 app.use('/workflows/delete',deleteRouter);
 app.use('/search',searchRouter);
 
+
+
+app.use('/languagepack/add_git',addGitRouter);
+app.use('/languagepack/add',addLangRouter);
 app.listen(6007,function(){
     console.log("Started on PORT 6007");
 })

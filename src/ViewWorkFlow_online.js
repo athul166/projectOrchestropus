@@ -264,12 +264,12 @@ console.log(card.workflows);
             </Row>
             <Row>
               <Col sm={11}>
-               <Link to={url} params={{ templateName: "hello" }}><FloatingActionButton style={{'float':'right'}}>
-                  <IconButton onClick={this.handleCloseDialog}>
-                    <img src={Edit} alt='edit'/>
+             
+                <FloatingActionButton style={{'float':'right'}}>
+                  <IconButton onClick={this.handleDownload}>
+                    <img src={Download} alt='Download'/>
                   </IconButton>
-                </FloatingActionButton></Link>
-               
+                </FloatingActionButton>
               </Col>
             </Row>
             <Divider style={{'width':'100%','marginTop':'20'}}/>

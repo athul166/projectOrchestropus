@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
 import CardComponent from './CardComponent.js';
+import CardComponent_online from './CardComponent_online.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
@@ -18,7 +19,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import NewGameIcon from 'material-ui/svg-icons/av/playlist-add';
 import NewPageIcon from 'material-ui/svg-icons/action/note-add';
 import FontIcon from 'material-ui/FontIcon';
-import LanguagePack from './languagepack.js';
+import LanguagePackDesigner from './languagepack_designer.js';
 import Workflow from './workflow.js';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
@@ -65,6 +66,7 @@ class SearchLibrary extends Component {
        status:'',
        d3_status:false,
        selectedCard:[],
+       arr_div_online:[],
        new_arr_online:[]
     };
   }
@@ -90,7 +92,7 @@ console.log("state is "+_this.state.arr_div);
           console.log("result is ");
         console.log(result.data);
           _this.setState({
-            new_arr_online: result.data
+            arr_div_online: result.data
           });
 console.log("state is "+_this.state.new_arr_online);
         })
@@ -140,18 +142,18 @@ onClickGo(event)
       })
 
 
-var url="http://localhost:6007/search?search_item="+t;
-  this.serverRequest =
-    axios
-      .get(url)
-      .then(function(result) {
-        console.log("result is ");
-       console.log("online",result.data);
-        _this.setState({
-          new_arr: result.data
-        });
-  console.log("state is "+_this.state.arr_div);
-      })
+// var url="http://35.154.207.12/workflow/search?search_item="+t;
+//   this.serverRequest =
+//     axios
+//       .get(url)
+//       .then(function(result) {
+//         console.log("result is ");
+//        console.log("online",result.data);
+//         _this.setState({
+//          new_arr_online : result.data
+//         });
+//   console.log("state is "+_this.state.new_arr_online);
+//       })
 
 
 
@@ -311,7 +313,7 @@ _onLanguage()
       (this.state.status=='workflow'?
      [
         <Workflow  d3_status={this.state.d3_status} width={700} height={630} />
-     ]:<LanguagePack />),
+     ]:<LanguagePackDesigner />),
 
    ]:
     <div style={style}>
@@ -328,22 +330,17 @@ _onLanguage()
       <Tabs style={{'marginTop':'40'}}>
           <Tab label="Online Repo">
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                 {status2 ? <CardComponent pageData={this.state.new_arr_online}/> : <CardComponent pageData={this.state.new_arr_online.reverse()} /> }
+                 {status2 ? <CardComponent_online  pageData={this.state.arr_div_online}/> : <CardComponent_online  pageData={this.state.new_arr_online.reverse()} /> }
        
             </div>
           </Tab>
           <Tab label="Local Repo" >
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()} /> }
+                {status2 ? <CardComponent  pageData={this.state.arr_div}/> : <CardComponent   pageData={this.state.new_arr.reverse()} /> }
             </div>
           </Tab>
 
 
-          <Tab label="Recommended" >
-            <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent  pageData={this.state.new_arr.reverse()} /> }
-            </div>
-          </Tab>
       </Tabs>
       <Row>
         <Col sm={10}>
