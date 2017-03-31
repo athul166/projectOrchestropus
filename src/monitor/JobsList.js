@@ -10,7 +10,7 @@ class JobsList extends Component {
     super(props);
     this.state = {
       jobList : [],
-      results : ''
+      results : []
     };
   }
   componentDidMount(){
@@ -85,37 +85,3 @@ JobsList.contextTypes = {
 };
 
 export default JobsList;
-
-
-// componentDidMount(){
-//   this.state.socket.on('result', function(results){
-//   this.setState({
-//       results:results
-//   });
-//   var jobs = this.state.jobList;
-//   console.log(this.state.results);
-//   //console.log("JOBS =====> "+this.state.jobList);
-//   if(jobs.length!=0) {
-//     var flag=0;
-//     jobs.map((job) => {
-//       if(job.jobId==results.jobId){
-//         flag=1;
-//       }
-//     });
-//     if(flag==0){
-//       jobs.push({
-//         jobId : this.state.results.jobId ,
-//         jobStatus : this.state.results.stages.status
-//       })
-//     }
-//   } else {
-//     jobs.push({
-//       jobId : this.state.results.jobId ,
-//       jobStatus : this.state.results.stages.status
-//     })
-//   }
-//   this.setState({
-//     jobList : jobs
-//   })
-// }.bind(this));
-// }

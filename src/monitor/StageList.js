@@ -23,6 +23,7 @@ class StageList extends Component {
       Results.forEach((result,i)=> {
         if(result.stageName==results.stageName){
           Results.splice(i,1);
+          //Results.splice(i,1);
           // Results.push();
         } else {
           Results.push(results);
