@@ -1,1 +1,0 @@
-{"creator":"q","description":"q","tags":["q"],"version":"q","languagepackName":"q"}

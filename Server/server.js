@@ -12,16 +12,19 @@ var addLangRouter = require('./../routes/addLangRouter');
 var mongoose = require('mongoose');
 var Workflow = require('./../models/workflow');
 
-var db = mongoose.connect("mongodb://localhost:27017/workflowsandlanpacks");
-var url = "mongodb://localhost:27017/workflowsandlanpacks";
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+
+var url = "mongodb://localhost:27018/workflowsandlanpacks";
+mongoose.connect(url);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 
 app.get('/',function(req,res){
 	Workflow.find({},function(err,docs){
@@ -30,7 +33,8 @@ app.get('/',function(req,res){
 	res.send("Internal errr");
 
 
-}else{
+}
+else{
 	//console.log(docs);
     res.json(docs);
     }})
