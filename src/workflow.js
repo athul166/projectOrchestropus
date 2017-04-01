@@ -46,14 +46,13 @@ class Workflow extends Component {
     this.handleRequestClose=this.handleRequestClose.bind(this);
     this.addUpload=this.addUpload.bind(this);
     this.handleOk=this.handleOk.bind(this);
-    console.log("props  ",this.props); 
-
-
-
+    this.handleOpen=this.handleOpen.bind(this);
+    console.log("props  ",this.props);
   }
 
-  handleOpen = () => {
-    this.setState({open: true});
+  handleOpen ()  {
+    console.log('dialog');
+    this.setState({open: !this.state.open});
   };
 
   handleClose = () => {
@@ -135,7 +134,7 @@ handleOk()
   componentDidMount() {
      var that=this;
      var c=0;
-     
+
      if(this.props.params!=undefined)
      {
       console.log("yes")
@@ -156,7 +155,7 @@ handleOk()
   .catch(function (error) {
     console.log(error);
   });
-     
+
 
 
 }
@@ -175,11 +174,8 @@ else
  // componentWillmount(){
  //   var that=this;
  //      console.log("obj is ");
-
  //    axios.get('http://localhost:6007/workflows/get',{
-  
  //    workflowName: that.props.params.templateName
-   
  //  })
  //  .then(function (response) {
  //    console.log(response);
@@ -196,7 +192,7 @@ else
 
 
   componentWillUnmount(){
-     
+
   // console.log("obj is ",this.state.obj);
 
     clearInterval(this.state.clearFunc);
@@ -238,7 +234,7 @@ else
   {
       this.setState({showSnack:true});
       //alert("Auto Save Enabled");
-     
+
     axios.post('http://localhost:6007/workflows/delete',{
    // creatorName: that.state.creatorName,
     workflowName: that.state.workflowName,
@@ -255,7 +251,7 @@ else
     console.log(error);
   });
 
-    
+
      axios.post('http://localhost:6007/workflows/add',{
       creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,
@@ -274,7 +270,10 @@ else
     }
 
     addUpload(){
+
+      //  alert("op");
       var that = this;
+
        axios.post('http://35.154.207.12/workflow/add',{
        creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,
@@ -292,7 +291,7 @@ else
       console.log(error);
     });
 
-   
+
 
     }
 
@@ -399,7 +398,7 @@ else
     ];
 
     const actions_ok = [
-    
+
       <Link to={'/workflows'}><FlatButton
         label="Ok"
         primary={true}
@@ -449,15 +448,15 @@ else
     return (
      <div> {this.state.obj==null?
       <div className="App">
-      
-      
+
+
        <Snackbar
           open={this.state.showSnack}
           message="Auto Save Enabled"
           autoHideDuration={3000}
           onRequestClose={this.handleRequestClose}
         />
-      
+
 
 
 
@@ -483,7 +482,7 @@ else
                    </div>
 
                              <div style={{marginLeft:"0%"}}>
-                                
+
                                 <RaisedButton
                                       id="browsewf"
                                       label="Browse"
@@ -493,6 +492,7 @@ else
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
                                  <RaisedButton label="Test"   />
+
                                    <RaisedButton label="Upload"  style={styles.button1} onTouchTap={this.handleOpen}/>
                                     <Dialog
                                           title="Are You Sure You Want To Upload This Workflow ?"
@@ -501,13 +501,13 @@ else
                                           open={this.state.open}
                                         >
                                     </Dialog>
-      {this.state.open_ok? <Dialog
+                                     <Dialog
                                           title="Successfully uploaded"
                                           actions={actions_ok}
                                           modal={true}
                                           open={this.state.open_ok}
                                         >
-                                    </Dialog>:<p></p>}
+                                    </Dialog>
                                </div>
 
 
@@ -526,7 +526,7 @@ else
           autoHideDuration={3000}
           onRequestClose={this.handleRequestClose}
         />
-      
+
        <MuiThemeProvider>
       <GridList cellHeight="auto" cols={2} style={{marginTop:"2%"}}>
         <GridTile>
@@ -564,7 +564,21 @@ else
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
                                    <RaisedButton label="Test"  />
-                                   <RaisedButton label="Upload"  />
+                                   <RaisedButton label="Edit" onTouchTap={this.handleOpen} />
+                                   <Dialog
+                                         title="Are You Sure You Want To Edit This Workflow ?"
+                                         actions={actions}
+                                         modal={true}
+                                         open={this.state.open}
+                                       >
+                                   </Dialog>
+                     <Dialog
+                                         title="Successfully Edited"
+                                         actions={actions_ok}
+                                         modal={true}
+                                         open={this.state.open_ok}
+                                       >
+                                   </Dialog>
                                </div>
 
 

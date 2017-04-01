@@ -48,7 +48,7 @@ handleOpen = () => {
   };
 
 handleClick(){
-  alert('klkl')
+  //alert('klkl')
 }
 
 handleChange(propertyname,event) {
@@ -95,28 +95,27 @@ handleChange(propertyname,event) {
   handleCreate()
   {
 
-   //  var that=this;
-   //  axios.post('https://api.github.com/user/repos',{
-   //      "name": this.state.name,
-   //      "description": "This is your first repository",
-   //      "homepage": "https://github.com",
-   //      "private": false,
-   //      "has_issues": true,
-   //      "has_projects": true,
-   //      "has_wiki": true
-   //  }, {
+    var that=this;
+    axios.post('https://api.github.com/user/repos',{
+        "name": this.state.name,
+        "description": "This is your first repository",
+        "homepage": "https://github.com",
+        "private": false,
+        "has_issues": true,
+        "has_projects": true,
+        "has_wiki": true
+    }, {
+      headers: {'Content-Type':'application/json','Authorization':'Bearer d6eec293ed5a64a243a894499bb9148bc1105312'}
 
-   //    headers: {'Content-Type':'application/json','Authorization':'Bearer 513c8b5ac2db38df064eea78e412c52576352951'}
+    })
+     .then(function (response) {
+      console.log(response.data.clone_url);
+      that.setState({repo_url:response.data.clone_url});
 
-   //  })
-   //  .then(function (response) {
-   //    console.log(response.data.clone_url);
-   //    that.setState({repo_url:response.data.clone_url});
-
-   // })
-   //  .catch(function (error) {
-   //    console.log(error);
-   //  });
+   })
+    .catch(function (error) {
+      console.log(error);
+    });
 
 
    if(this.state.creator==''|| this.state.tags==''||this.state.version==''||this.state.name==''||this.state.description=='')

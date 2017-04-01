@@ -2,7 +2,7 @@ var Workflow=require('./../models/workflow');
 const yaml = require('js-yaml');
 //var mongo=require('mongodb');
 var mongo=require('mongodb');
-var url = "mongodb://localhost:27017/workflowsandlanpacks";
+var url = "mongodb://localhost:27018/workflowsandlanpacks";
 const fs = require('fs');
 
  const spawn = require('child_process').spawn;
@@ -10,33 +10,82 @@ const fs = require('fs');
 
 
 
+//
+//
+// var get=function(req,res){
+// 	var tag=req.query.search_item;
+// 	console.log("tagsss   "+tag);
+// 	var t=tag.split(',');
+// 	console.log(t);
+//  	Workflow.find({ $or :[{"tags":{"$all":t}},{"workflow_name":t}]},function(err,docs){
+//     if(err){
+// 			res.status(500);
+// 			res.send("Internal errr");
+// 			}
+// 			else{
+// 					console.log("result of server ");
+// 					console.log(docs);
+// 					res.json(docs);
+// 			}
+// 	})
+// }
 
 
 var get=function(req,res){
-	var tag=req.query.search_item;
-	console.log("tagsss   "+tag);
-	var t=tag.split(',');
-	console.log(t);
- 	Workflow.find({ $or :[{"tags":{"$all":t}},{"workflow_name":t}]},function(err,docs){
-    if(err){
-			res.status(500);
-			res.send("Internal errr");
-			}
-			else{
-					console.log("result of server ");
-					//console.log(docs);
-					res.json(docs);
-			}
-	})
-}
 
+ var key=Object.keys(req.query);
+  //     movie.find({tags:{$in:tags}},
+  //console.log(req.query[key[0]]);
+  console.log(req.query[key]);
+  var x=typeof(req.query[key]);
+  console.log(x);
+  console.log("inside creator");
+  if (x=='string') {
+
+   Workflow.find({$or:[{workflow_name: { $in: req.query[key]}},{creator: {$in:req.query[key] }},{tags:{$all: req.query[key]}}]},
+
+     function(err,mov){
+       if (err) {
+         res.status(500);
+         res.send('internal server error');
+       }
+       else {
+
+        res.status(200);
+        console.log(mov);
+         res.json(mov);
+
+      }
+     }
+     )
+  }
+  else{
+   Workflow.find({tags:{$in: req.query[key]}},
+
+   function(err,mov){
+     if (err) {
+       res.status(500);
+       res.send('internal server error');
+     }
+     else {
+
+      res.status(200);
+       res.json(mov);
+
+    }
+   }
+   )
+ }
+
+
+};
 
 
 
 var get1=function(req,res){
 	var name=req.query.name;
 	console.log("name   "+name);
-	
+
  	Workflow.find({"workflow_name":name},function(err,docs){
     if(err){
 			res.status(500);
@@ -96,7 +145,7 @@ var add = function(req,res){
 
 	 }
 
-	 
+
 
 
 
@@ -104,7 +153,7 @@ var add = function(req,res){
 
 				console.log("in asdsadsa");
 
-                   var repo_name=req.body.languagepackName;
+     var repo_name=req.body.languagepackName;
 
 			 console.log(repo_name);
 
@@ -136,9 +185,9 @@ var add = function(req,res){
 									languagepackName:req.body.languagepackName
 							 }
 
-							 createLangPack(req.body.creatorName,req.body.languagepackName,meta,req.body.list);
+							// createLangPack(req.body.creatorName,req.body.languagepackName,meta,req.body.list);
 
-							// pushCode("first Commmit",repo_url,req.body.creatorName,req.body.languagepackName,meta,req.body.list);
+							 pushCode("first Commmit",repo_url,req.body.creatorName,req.body.languagepackName,meta,req.body.list);
 
 
 				};
@@ -290,6 +339,78 @@ var del = function(req,res) {
         }
     });
         }
+
+///////////////////////////////////////////
+
+
+
+
+var pushCode = function pushCode(msg,repo,cname,lname,meta,list) {
+try {
+
+var dir=process.cwd();
+	console.log("The starting  directory is " + process.cwd());
+
+fs.mkdir(lname);
+
+console.log("THIS IS WHERE WE ARE TRYING TO GO", process.cwd()+'/'+lname+'/');
+
+process.chdir(process.cwd()+'/'+lname+'/');
+console.log('Now this is our directory  ', process.cwd());
+
+
+     var ls =spawn('git', ['clone',repo])
+	     //spawn('cd', ["userDetails"])
+var repo1='/'+repo;
+   console.log("REPOSITORY========================", repo1);
+// var dir1=process.cwd();
+
+//console.log("dir ",process.cwd());
+ var dir1=dir+"/"+lname;
+ console.log('this is where we are tying to go', dir1);
+
+	process.chdir(dir1);
+ 	console.log("The new working directory is " + process.cwd());
+
+   list.map((a,e)=>
+  {
+ 	 fs.writeFile(a.item, a.code, (err) => {
+ 	 if (err) throw err;
+
+ 	           spawn('git', ['add','.'])
+ 	 					 spawn('git', ['commit','-m',msg])
+ 	 					 spawn('git', ['remote','add','origin',repo])
+ 						 spawn('git', ['push','-u','origin','master'])
+ 	  console.log('It\'s saved!');
+ 	 });
+ })
+   	 ls.on('close', code => {
+//
+// 		//console.log(__dirname);
+//\\
+
+ process.chdir(dir);
+// console.log("now directory after all proces is ",process.cwd());
+// 		console.log(`child process exited with code ${code}`);
+
+   	  });
+
+
+
+
+
+	 } catch (err) {
+ 	    console.log('Error in this',err)
+	 }
+
+ 	}
+
+
+
+
+////////////////////////////////////////////
+
+
 
 
  module.exports ={

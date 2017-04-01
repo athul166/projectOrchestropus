@@ -106,7 +106,9 @@ console.log("state is "+_this.state.new_arr_online);
       this.setState({new_arr:[]});
     }
     else
-    this.click();
+    {
+    this.onClickGo();
+     }
     }
     handleTouchTap() {
       alert('You clicked the Chip.');
@@ -118,48 +120,65 @@ console.log("state is "+_this.state.new_arr_online);
 onClickGo(event)
 {
   alert("klkl");
-  console.log(this.state.value);
+//  console.log(this.state.value);
   var _this = this;
   var t=this.state.chipContent;
+  if(this.state.value!='')
   t.push(this.state.value);
   console.log("tttttt");
-  console.log(t);
-  var url="http://localhost:6007/search?search_item="+t;
+//  console.log(t);
+
+
+
+
+this.setState({value:''});
+
+var u1="http://localhost:6007/search?search_item=";
+var u2="http://35.154.207.12/workflow/search?search_item=";
+  for(var i=0;i<t.length;i++)
+  {
+    u1=u1+t[i]+'&search_item=';
+    u2=u2+t[i]+'&search_item=';
+    }
+
+   console.log("url is this jksalfjdlksajdlkasjdlasjdlkasjd ",u1.substring(0,u1.length-13));
+
+var url1=u1.substring(0,u1.length-13);
+var url2=u2.substring(0,u2.length-13);
+
+
+//  var url="http://localhost:6007/search?search_item="+t;
   this.serverRequest =
     axios
-      .get(url)
+      .get(url1)
       .then(function(result) {
         console.log("result is ");
        console.log(result.data);
         _this.setState({
           new_arr: result.data
         });
-  console.log("state is "+_this.state.arr_div);
+      })
+      //console.log("state is "+_this.state.arr_div);
+
+
+  this.serverRequest =
+    axios
+      .get(url2)
+      .then(function(result) {
+        console.log("result is ");
+       console.log("online",result.data);
+        _this.setState({
+         new_arr_online : result.data
+        });
+  console.log("state is "+_this.state.new_arr_online);
       })
 
 
-// var url="http://35.154.207.12/workflow/search?search_item="+t;
-//   this.serverRequest =
-//     axios
-//       .get(url)
-//       .then(function(result) {
-//         console.log("result is ");
-//        console.log("online",result.data);
-//         _this.setState({
-//          new_arr_online : result.data
-//         });
-//   console.log("state is "+_this.state.new_arr_online);
-//       })
 
 
 
 
 
-
-
-
-
-this.setState({value:''});
 
 }
 
@@ -246,6 +265,39 @@ click(input)
   // console.log("after reverse");
   // console.log(this.state.new_arr);
   this.setState({value:''});
+
+  alert("klkl");
+  //  console.log(this.state.value);
+  var _this = this;
+  var t=this.state.chipContent;
+  t.push(this.state.value);
+  //  console.log("tttttt");
+  //  console.log(t);
+
+  var u="http://localhost:6007/search?search_item=";
+  for(var i=0;i<t.length;i++)
+  {
+    u=u+t[i]+'&search_item=';
+  }
+
+   console.log("url is this jksalfjdlksajdlkasjdlasjdlkasjd ",u.substring(0,u.length-13));
+
+  var url=u.substring(0,u.length-13);
+
+  //  var url="http://localhost:6007/search?search_item="+t;
+  this.serverRequest =
+    axios
+      .get(url)
+      .then(function(result) {
+        console.log("result is ");
+       console.log(result.data);
+        _this.setState({
+          new_arr: result.data
+        });
+      })
+
+
+
 }
 
 handleEnter(event){
@@ -317,7 +369,7 @@ _onLanguage()
       <Row>
           <TextField
                 hintText="Search here"
-                floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)}/>
+                floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)} value={this.state.value}/>
           <RaisedButton label="Go" primary={true} onClick={this.onClickGo.bind(this)} style={{'marginLeft':'5'}}/>
       </Row>
       <Row>
@@ -327,7 +379,7 @@ _onLanguage()
           <Tab label="Online Repo">
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
                  {status2 ? <CardComponent_online  pageData={this.state.arr_div_online}/> : <CardComponent_online  pageData={this.state.new_arr_online.reverse()} /> }
-       
+
 
             </div>
           </Tab>
