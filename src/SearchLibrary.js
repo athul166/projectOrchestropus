@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
 import CardComponent from './CardComponent.js';
+import CardComponent_online from './CardComponent_online.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { SpeedDial, SpeedDialItem } from 'react-mui-speeddial';
 // just some icons for illustration (example only):
@@ -17,7 +18,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import NewGameIcon from 'material-ui/svg-icons/av/playlist-add';
 import NewPageIcon from 'material-ui/svg-icons/action/note-add';
 import FontIcon from 'material-ui/FontIcon';
-import LanguagePack from './languagepack.js';
+import LanguagePackDesigner from './languagepack_designer.js';
 import Workflow from './workflow.js';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
@@ -64,6 +65,7 @@ class SearchLibrary extends Component {
        status:'',
        d3_status:false,
        selectedCard:[],
+       arr_div_online:[],
        new_arr_online:[]
     };
   }
@@ -89,7 +91,7 @@ class SearchLibrary extends Component {
           console.log("result is ");
         console.log(result.data);
           _this.setState({
-            new_arr_online: result.data
+            arr_div_online: result.data
           });
 console.log("state is "+_this.state.new_arr_online);
         })
@@ -104,7 +106,9 @@ console.log("state is "+_this.state.new_arr_online);
       this.setState({new_arr:[]});
     }
     else
-    this.click();
+    {
+    this.onClickGo();
+     }
     }
     handleTouchTap() {
       alert('You clicked the Chip.');
@@ -116,37 +120,57 @@ console.log("state is "+_this.state.new_arr_online);
 onClickGo(event)
 {
   alert("klkl");
-  console.log(this.state.value);
+//  console.log(this.state.value);
   var _this = this;
   var t=this.state.chipContent;
+  if(this.state.value!='')
   t.push(this.state.value);
   console.log("tttttt");
-  console.log(t);
-  var url="http://localhost:6007/search?search_item="+t;
+//  console.log(t);
+
+
+
+
+this.setState({value:''});
+
+var u1="http://localhost:6007/search?search_item=";
+var u2="http://35.154.207.12/workflow/search?search_item=";
+  for(var i=0;i<t.length;i++)
+  {
+    u1=u1+t[i]+'&search_item=';
+    u2=u2+t[i]+'&search_item=';
+    }
+
+   console.log("url is this jksalfjdlksajdlkasjdlasjdlkasjd ",u1.substring(0,u1.length-13));
+
+var url1=u1.substring(0,u1.length-13);
+var url2=u2.substring(0,u2.length-13);
+
+
+//  var url="http://localhost:6007/search?search_item="+t;
   this.serverRequest =
     axios
-      .get(url)
+      .get(url1)
       .then(function(result) {
         console.log("result is ");
        console.log(result.data);
         _this.setState({
           new_arr: result.data
         });
-  console.log("state is "+_this.state.arr_div);
       })
+      //console.log("state is "+_this.state.arr_div);
 
 
-var url="http://localhost:6007/search?search_item="+t;
   this.serverRequest =
     axios
-      .get(url)
+      .get(url2)
       .then(function(result) {
         console.log("result is ");
        console.log("online",result.data);
         _this.setState({
-          new_arr: result.data
+         new_arr_online : result.data
         });
-  console.log("state is "+_this.state.arr_div);
+  console.log("state is "+_this.state.new_arr_online);
       })
 
 
@@ -155,9 +179,6 @@ var url="http://localhost:6007/search?search_item="+t;
 
 
 
-
-
-this.setState({value:''});
 
 }
 
@@ -244,6 +265,39 @@ click(input)
   // console.log("after reverse");
   // console.log(this.state.new_arr);
   this.setState({value:''});
+
+  alert("klkl");
+  //  console.log(this.state.value);
+  var _this = this;
+  var t=this.state.chipContent;
+  t.push(this.state.value);
+  //  console.log("tttttt");
+  //  console.log(t);
+
+  var u="http://localhost:6007/search?search_item=";
+  for(var i=0;i<t.length;i++)
+  {
+    u=u+t[i]+'&search_item=';
+  }
+
+   console.log("url is this jksalfjdlksajdlkasjdlasjdlkasjd ",u.substring(0,u.length-13));
+
+  var url=u.substring(0,u.length-13);
+
+  //  var url="http://localhost:6007/search?search_item="+t;
+  this.serverRequest =
+    axios
+      .get(url)
+      .then(function(result) {
+        console.log("result is ");
+       console.log(result.data);
+        _this.setState({
+          new_arr: result.data
+        });
+      })
+
+
+
 }
 
 handleEnter(event){
@@ -307,7 +361,7 @@ _onLanguage()
       (this.state.status=='workflow'?
      [
         <Workflow  d3_status={this.state.d3_status} width={700} height={630} />
-     ]:<LanguagePack />),
+     ]:<LanguagePackDesigner />),
 
    ]:
     <div style={style}>
@@ -315,7 +369,7 @@ _onLanguage()
       <Row>
           <TextField
                 hintText="Search here"
-                floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)}/>
+                floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)} value={this.state.value}/>
           <RaisedButton label="Go" primary={true} onClick={this.onClickGo.bind(this)} style={{'marginLeft':'5'}}/>
       </Row>
       <Row>
@@ -324,22 +378,18 @@ _onLanguage()
       <Tabs style={{'marginTop':'40'}}>
           <Tab label="Online Repo">
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                 {status2 ? <CardComponent pageData={this.state.new_arr_online}/> : <CardComponent pageData={this.state.new_arr_online.reverse()} /> }
+                 {status2 ? <CardComponent_online  pageData={this.state.arr_div_online}/> : <CardComponent_online  pageData={this.state.new_arr_online.reverse()} /> }
+
 
             </div>
           </Tab>
           <Tab label="Local Repo" >
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent pageData={this.state.new_arr.reverse()} /> }
+                {status2 ? <CardComponent  pageData={this.state.arr_div}/> : <CardComponent   pageData={this.state.new_arr.reverse()} /> }
             </div>
           </Tab>
 
 
-          <Tab label="Recommended" >
-            <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent pageData={this.state.arr_div}/> : <CardComponent  pageData={this.state.new_arr.reverse()} /> }
-            </div>
-          </Tab>
       </Tabs>
       <Row>
         <Col sm={10}>

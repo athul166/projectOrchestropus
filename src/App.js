@@ -10,7 +10,9 @@ import Home from './Home.js';
 import RaisedButton from 'material-ui/RaisedButton';
 import Monitor from './monitor/Monitor';
 import {  Link } from 'react-router';
-import Execute from './Execute'
+import Execute from './Execute';
+import Appbutton from '../icons/appbar.png';
+import IconButton from 'material-ui/IconButton';
 
 const style = {
   margin: 12,
@@ -35,6 +37,7 @@ class App extends Component {
       <div>
             <AppBar
               title="Project"
+              iconElementLeft={<IconButton><img src={Appbutton} /></IconButton>}
               onLeftIconButtonTouchTap={this.handleToggle}
               style={{textAlign:'center'}}>
             <Link to={'/home'}><RaisedButton label="Home" style={style} /></Link>

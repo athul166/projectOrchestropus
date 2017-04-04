@@ -13,6 +13,7 @@ import Monitor from './monitor/Monitor';
 //import Routes from './routes';
 import SearchLibrary from './SearchLibrary';
 import Routes from './routes';
+import LanguagePackDesigner from './languagepack_designer';
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
@@ -29,7 +30,9 @@ ReactDOM.render(
        	<Route path="/execute" component={Execute} />
        	<Route path="/monitor" component={Monitor} />
        	<Route path="/library" component={SearchLibrary} />
+        <Route path="/languagepack" component={LanguagePackDesigner} />
        	<Route path="/workflow/:templateName" component={Workflow} />
+       	<Route path="/workflows" component={Workflow} />
      </Route>
   </Router>,
    document.getElementById('root')

@@ -48,14 +48,13 @@ class Workflow extends Component {
     this.handleRequestClose=this.handleRequestClose.bind(this);
     this.addUpload=this.addUpload.bind(this);
     this.handleOk=this.handleOk.bind(this);
+    this.handleOpen=this.handleOpen.bind(this);
     console.log("props  ",this.props);
-
-
-
   }
 
-  handleOpen = () => {
-    this.setState({open: true});
+  handleOpen ()  {
+    console.log('dialog');
+    this.setState({open: !this.state.open});
   };
 
   handleClose = () => {
@@ -177,11 +176,8 @@ else
  // componentWillmount(){
  //   var that=this;
  //      console.log("obj is ");
-
  //    axios.get('http://localhost:6007/workflows/get',{
-
  //    workflowName: that.props.params.templateName
-
  //  })
  //  .then(function (response) {
  //    console.log(response);
@@ -276,7 +272,10 @@ else
     }
 
     addUpload(){
+
+      //  alert("op");
       var that = this;
+
        axios.post('http://35.154.207.12/workflow/add',{
        creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,
@@ -415,7 +414,6 @@ handleTest = () =>{
      console.log(err);
   });
 }
-
   render() {
     const actions = [
       <FlatButton
@@ -554,13 +552,13 @@ handleTest = () =>{
                                           open={this.state.open}
                                         >
                                     </Dialog>
-      {this.state.open_ok? <Dialog
+                                     <Dialog
                                           title="Successfully uploaded"
                                           actions={actions_ok}
                                           modal={true}
                                           open={this.state.open_ok}
                                         >
-                                    </Dialog>:<p></p>}
+                                    </Dialog>
                                </div>
 
 
@@ -617,7 +615,21 @@ handleTest = () =>{
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
                                    <RaisedButton label="Test"  />
-                                   <RaisedButton label="Upload"  />
+                                   <RaisedButton label="Edit" onTouchTap={this.handleOpen} />
+                                   <Dialog
+                                         title="Are You Sure You Want To Edit This Workflow ?"
+                                         actions={actions}
+                                         modal={true}
+                                         open={this.state.open}
+                                       >
+                                   </Dialog>
+                     <Dialog
+                                         title="Successfully Edited"
+                                         actions={actions_ok}
+                                         modal={true}
+                                         open={this.state.open_ok}
+                                       >
+                                   </Dialog>
                                </div>
 
 
