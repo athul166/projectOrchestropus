@@ -20,7 +20,7 @@ export default class Execute extends Component {
       new_arr:[],
       workflows_body:'',
       value: ''
-      
+
 
     }
   }
@@ -36,7 +36,7 @@ export default class Execute extends Component {
       _this.setState({
         arr_div: result.data
       });
-         
+
         })
 
   }
@@ -59,6 +59,7 @@ export default class Execute extends Component {
             repoUrl : this.state.url
           },
           template: a,
+          templateName:this.state.itemvalue
         })
         .then(function(response){
           console.log(response);
@@ -91,10 +92,10 @@ export default class Execute extends Component {
             console.log(_this.state.workflows_body,"ioioioioioioi");
         _this.handleRequest(_this.state.workflows_body);
 
-       
+
         })
-       
-         
+
+
 
 
 
@@ -107,7 +108,7 @@ export default class Execute extends Component {
         this.setState({itemvalue: itemvalue1});
         console.log("itemvalue is "+this.state.itemvalue);
 
-      } 
+      }
 
       render(){
          console.log("workflows boy only  "+this.state.workflows_body);

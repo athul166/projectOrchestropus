@@ -10,11 +10,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Graph from './Graph';
 import axios from 'axios';
-import FlatButton from 'material-ui/FlatButton';
 var YAML = require('json2yaml');
 import SnackBar from 'react-material-snackbar';
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import {  Link } from 'react-router';
 
 class Workflow extends Component {
@@ -33,13 +33,13 @@ class Workflow extends Component {
       workflowName:'',
       tags:'',
       description:'',
-      open:false,
-      url:'',
       clearFunc:'',
       showSnack:false,
       open: false,
       obj:{},
-      open_ok:false
+      open_ok:false,
+      openTest:false,
+      url:""
     }
     this.updateFilename=this.updateFilename.bind(this);
     this.showFileName=this.showFileName.bind(this);
@@ -384,35 +384,38 @@ else
       this.setState({ nodes: [], links: [], statePresent: true});
   }
 }
-  handleOpen = () => {
-   this.setState({open: true});
+handleOpenTest = () => {
+  this.setState({
+    openTest:true
+  })
+}
+handleCloseTest = () => {
+  this.setState({
+    openTest:false
+  })
+}
+  handleChangeUrl(evt){
+  this.setState({url:evt.target.value});
   };
+handleTest = () =>{
 
-  handleClose = () => {
-   this.setState({open: false});
-  };
+   this.setState({openTest: false});
 
-  handleTest = () =>{
-    this.setState({open: false});
-    axios.post('http://localhost:4070/api/v1/jobs',{
-      payload : {
-        repoUrl : this.state.url
-      },
-      template: this.state.textChanged,
-      templateName: null
+   axios.post('http://localhost:4070/api/v1/jobs',{
+         payload : {
+         repoUrl : this.state.url
+    },
+    template: this.state.textChanged,
+    templateName:this.state.workflowName
     })
     .then(function(response){
-      console.log(response);
+     console.log(response);
     })
     .catch(function(err) {
-      console.log(err);
-    });
+     console.log(err);
+  });
 }
-handleChangeUrl(evt)
- {
-   this.setState({url:evt.target.value});
-   console.log(this.state.url);
- }
+
   render() {
     const actions = [
       <FlatButton
@@ -427,14 +430,26 @@ handleChangeUrl(evt)
         onTouchTap={this.addUpload}
       />,
     ];
-
+    const actionsTest = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleCloseTest}
+      />,
+      <FlatButton
+        label="Test"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleTest}
+      />,
+    ];
     const actions_ok = [
 
-      <FlatButton
+      <Link to={'/workflows'}><FlatButton
         label="Ok"
         primary={true}
         onTouchTap={this.handleOk}
-      />,
+      />,</Link>
     ];
   //  console.log("propsssssssssssssssss");
   // //  console.log(this.props.params.userId);
@@ -446,20 +461,6 @@ handleChangeUrl(evt)
           mode: "text/x-yaml",
 
   }
-  const actions_test = [
-        <FlatButton
-          label="Cancel"
-          primary={true}
-          onTouchTap={this.handleClose}
-        />,
-        <FlatButton
-          label="Execute"
-          primary={true}
-          keyboardFocused={true}
-          onTouchTap={this.handleTest}
-        />,
-      ];
-
     const { width, height } = this.props;
     const styles = {
       graph: {
@@ -526,13 +527,8 @@ handleChangeUrl(evt)
           {this.state.statePresent ? <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={this.state.errorText} id='text_area'/> : <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={"Warning: "+this.state.errorText+" is not present"} id='text_area1'/>}
                    </div>
 
-                             <div style={{marginLeft:"1%"}}>
-                                <TextField
-                                      hintText="Enter File Name"
-                                      floatingLabelFixed={true}
-                                      value={this.state.filename}
-                                      onChange={this.updateFilename}
-                                />
+                             <div style={{marginLeft:"0%"}}>
+
                                 <RaisedButton
                                       id="browsewf"
                                       label="Browse"
@@ -541,17 +537,15 @@ handleChangeUrl(evt)
                                       containerElement="label" primary={true}>
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
-                                <RaisedButton label="Test" onTouchTap={this.handleOpen} />
-                                <Dialog
-                                  title="Test"
-                                  actions={actions_test}
-                                  modal={false}
-                                  open={this.state.open}
-                                  onRequestClose={this.handleClose}
-                                >
-                                  <TextField hintText="Enter Git Repo Url" onChange={this.handleChangeUrl.bind(this)} style={{'width':'80%'}} /><br />
-                                </Dialog>
-                                 <RaisedButton label="Test"   />
+                                 <RaisedButton label="Test"  onTouchTap={this.handleOpenTest} />
+                                   <Dialog
+                                         title="Are You Sure You Want To Upload This Workflow ?"
+                                         actions={actionsTest}
+                                         modal={true}
+                                         open={this.state.openTest}
+                                       >
+                                       <TextField hintText="Enter Git Repo Url" onChange={this.handleChangeUrl.bind(this)} style={{'width':'80%'}} /><br/>
+                                   </Dialog>
                                    <RaisedButton label="Upload"  style={styles.button1} onTouchTap={this.handleOpen}/>
                                     <Dialog
                                           title="Are You Sure You Want To Upload This Workflow ?"

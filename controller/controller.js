@@ -4,6 +4,9 @@ const yaml = require('js-yaml');
 var mongo=require('mongodb');
 var url = "mongodb://localhost:27017/workflowsandlanpacks";
 
+var Jobs=require('./../models/jobs');
+const client = require('../redisClient').duplicate();
+
 
 
 
@@ -27,12 +30,10 @@ var get=function(req,res){
 }
 
 
-
-
 var get1=function(req,res){
 	var name=req.query.name;
 	console.log("name   "+name);
-	
+
  	Workflow.find({"workflow_name":name},function(err,docs){
     if(err){
 			res.status(500);
@@ -92,6 +93,38 @@ var add = function(req,res){
 
 	 }
 
+
+
+	 var stage=function(req,res){
+		 console.log("in stage ");
+	   const stagesKey = req.query.jobId + ':stages';
+	   client.hgetall(stagesKey, (err, replyMap) => {
+	     if(err) { console.error('Error Retrieving Stages:', err); return; }
+	     console.log(stagesKey);
+	     console.log(replyMap);
+	     // const stages = convertHgetReplyToObject(replyMap);
+	     // console.log("stages ====> "+stages);
+	     res.send(replyMap);
+	   });
+	 }
+
+
+
+
+	var job= function(req,res){
+	 	Jobs.find({},function(err,docs){
+	      if(err){
+	 	res.status(500);
+	 	res.send("Internal errr");
+	 }else{
+	 	//console.log(docs);
+	     res.json(docs);
+	     }})
+	 }
+
+
+
+
 	 var delete1 = function(req,res){
 
              mongo.connect(url, function(err, db) {
@@ -116,5 +149,7 @@ module.exports={
   	 add:add,
   	get:get,
 		delete1:delete1,
-		get1:get1
+		get1:get1,
+		job:job,
+		stage:stage
   }
