@@ -16,6 +16,7 @@ import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {  Link } from 'react-router';
+var YAML = require('json2yaml');
 
 class Workflow extends Component {
   constructor(props) {
@@ -37,7 +38,9 @@ class Workflow extends Component {
       showSnack:false,
       open: false,
       obj:{},
-      open_ok:false
+      open_ok:false,
+      open1:false,
+      open_ok1:false
     }
     this.updateFilename=this.updateFilename.bind(this);
     this.showFileName=this.showFileName.bind(this);
@@ -45,8 +48,10 @@ class Workflow extends Component {
     this.save=this.save.bind(this);
     this.handleRequestClose=this.handleRequestClose.bind(this);
     this.addUpload=this.addUpload.bind(this);
+  //  this.addUpload1=this.addUpload1.bind(this);
     this.handleOk=this.handleOk.bind(this);
     this.handleOpen=this.handleOpen.bind(this);
+  //  this.handleOpen1=this.handleOpen1.bind(this);
     console.log("props  ",this.props);
   }
 
@@ -54,10 +59,18 @@ class Workflow extends Component {
     console.log('dialog');
     this.setState({open: !this.state.open});
   };
+  // handleOpen1 ()  {
+  //   console.log('dialog');
+  //   this.setState({open_ok1: !this.state.open_ok1});
+  // };
 
   handleClose = () => {
     this.setState({open: false});
   };
+
+  // handleClose1 = () => {
+  //   this.setState({open1: false});
+  // };
 
   handleRequestClose() {
     this.setState({
@@ -271,34 +284,61 @@ else
 
     addUpload(){
 
-      //  alert("op");
+      //alert("op");
       var that = this;
-
+       console.log(that.state.text);
        axios.post('http://35.154.207.12/workflow/add',{
-       creatorName: that.state.creatorName,
+      creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,
       tags:that.state.tags,
       description:that.state.description,
-      text:that.state.text
+       text:that.state.text
     })
     .then(function (response) {
-      console.log(response);
+      alert("response ",response);
        that.setState({open_ok:true});
-       alert("added");
+    //   alert("added");
 
     })
     .catch(function (error) {
-      console.log(error);
+    //  alert(error);
     });
+  }
 
-
-
-    }
+//
+//   addUpload1(){
+//
+//
+//    //alert("in upload 1");
+//
+//   console.log(this.state.creatorName);
+//   console.log(this.state.workflowName);
+//   console.log(this.state.tags);
+//   console.log(this.state.description);
+//     var that = this;
+//  console.log("text is  ",that.state.text);
+//   //    axios.post('http://35.154.207.12/workflow/add',{
+//   //   creatorName: that.state.creatorName,
+//   //   workflowName: that.state.workflowName,
+//   //   tags:that.state.tags,
+//   //   description:that.state.description,
+//   //    text:that.state.text
+//   // })
+//   // .then(function (response) {
+//   //   alert("response ",response);
+//   //    that.setState({open_ok1:true});
+//   //    alert("added");
+//   //
+//   // })
+//   // .catch(function (error) {
+//   //   alert(error);
+//   // });
+// }
 
     onCreator(event)
     {
       this.setState({creatorName:event.target.value});
-      //alert(this.state.creatorName);
+
     }
     onName(event)
     {
@@ -402,7 +442,31 @@ else
       <Link to={'/workflows'}><FlatButton
         label="Ok"
         primary={true}
-        onTouchTap={this.handleOk}
+
+      />,</Link>
+    ];
+
+
+    const actions1 = [
+      <FlatButton
+        label="NO"
+        primary={true}
+        onTouchTap={this.handleClose1}
+      />,
+      <FlatButton
+        label="YES"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.addUpload1}
+      />,
+    ];
+
+    const actions_ok1 = [
+
+      <Link to={'/workflows'}><FlatButton
+        label="Ok"
+        primary={true}
+
       />,</Link>
     ];
   //  console.log("propsssssssssssssssss");
@@ -415,7 +479,7 @@ else
           mode: "text/x-yaml",
 
   }
-    const { width, height } = this.props;
+   const { width, height } = this.props;
     const styles = {
       graph: {
       width,
@@ -474,7 +538,6 @@ else
           <div >
           <CodeMirror ref="editor" onChange={this.handleChange.bind(this)} value={this.state.text}  options={options} />
           <textarea type='textarea' rows={45} cols={80} value={ this.state.textChanged } style={{'display':'none'}}/>
-
            </div>
            <div>
            <br/>
@@ -501,13 +564,13 @@ else
                                           open={this.state.open}
                                         >
                                     </Dialog>
-                                     <Dialog
+                                    {this.state.open_ok? <Dialog
                                           title="Successfully uploaded"
                                           actions={actions_ok}
                                           modal={true}
                                           open={this.state.open_ok}
                                         >
-                                    </Dialog>
+                                    </Dialog>:<p></p>}
                                </div>
 
 
@@ -549,12 +612,6 @@ else
                    </div>
 
                              <div style={{marginLeft:"1%"}}>
-                                <TextField
-                                      hintText="Enter File Name"
-                                      floatingLabelFixed={true}
-                                      value={this.state.filename}
-                                      onChange={this.updateFilename}
-                                />
                                 <RaisedButton
                                       id="browsewf"
                                       label="Browse"
@@ -564,21 +621,7 @@ else
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
                                    <RaisedButton label="Test"  />
-                                   <RaisedButton label="Edit" onTouchTap={this.handleOpen} />
-                                   <Dialog
-                                         title="Are You Sure You Want To Edit This Workflow ?"
-                                         actions={actions}
-                                         modal={true}
-                                         open={this.state.open}
-                                       >
-                                   </Dialog>
-                     <Dialog
-                                         title="Successfully Edited"
-                                         actions={actions_ok}
-                                         modal={true}
-                                         open={this.state.open_ok}
-                                       >
-                                   </Dialog>
+
                                </div>
 
 

@@ -340,7 +340,6 @@ var del = function(req,res) {
     });
         }
 
-///////////////////////////////////////////
 
 
 
@@ -348,50 +347,66 @@ var del = function(req,res) {
 var pushCode = function pushCode(msg,repo,cname,lname,meta,list) {
 try {
 
-var dir=process.cwd();
+  var dir=process.cwd();
 	console.log("The starting  directory is " + process.cwd());
 
-fs.mkdir(lname);
+  fs.mkdir(lname,function(err){
+   if (err) {
+       return console.error(err);
+   }
+   console.log("Directory created successfully!");
+});
+  //console.log("repository after mkdir ", process.cwd());
 
-console.log("THIS IS WHERE WE ARE TRYING TO GO", process.cwd()+'/'+lname+'/');
 
-process.chdir(process.cwd()+'/'+lname+'/');
-console.log('Now this is our directory  ', process.cwd());
+ //console.log("THIS IS WHERE WE ARE TRYING TO GO", process.cwd()+'/'+lname+'/');
 
-
-     var ls =spawn('git', ['clone',repo])
+//process.chdir(process.cwd()+'/'+lname+'/');
+//console.log('Now this is our directory  after changing directory ', process.cwd());
+  console.log(process.cwd());
+var dir=process.cwd();
+   var ls =spawn('git', ['clone',repo])
 	     //spawn('cd', ["userDetails"])
-var repo1='/'+repo;
-   console.log("REPOSITORY========================", repo1);
+  //  var repo1='/'+repo;
+  //  console.log("REPOSITORY========================", repo1);
 // var dir1=process.cwd();
 
 //console.log("dir ",process.cwd());
- var dir1=dir+"/"+lname;
- console.log('this is where we are tying to go', dir1);
+ // var dir1=dir+"/"+lname;
+ // console.log('this is where we are tying to go', dir1);
+ //
+ // process.chdir(dir1);
+ // 	console.log("The new working directory is " + process.cwd());
+//  console.log("before list ", process.cwd());
+process.chdir(process.cwd()+'/'+lname+'/');
+ console.log("before list  2", process.cwd());
 
-	process.chdir(dir1);
- 	console.log("The new working directory is " + process.cwd());
 
    list.map((a,e)=>
   {
  	 fs.writeFile(a.item, a.code, (err) => {
  	 if (err) throw err;
+  // console.log("git ststus");
+  console.log("inside list  2", process.cwd());
 
- 	           spawn('git', ['add','.'])
- 	 					 spawn('git', ['commit','-m',msg])
- 	 					 spawn('git', ['remote','add','origin',repo])
- 						 spawn('git', ['push','-u','origin','master'])
- 	  console.log('It\'s saved!');
+          //    spawn('git', ['add','.'])
+ 	 		// 			 spawn('git', ['commit','-m',msg])
+ 	 		// 			 spawn('git', ['remote','add','origin',repo])
+ 				// 		 spawn('git', ['push','-u','origin','master'])
+ 	       //   console.log('It\'s saved!');
  	 });
  })
-   	 ls.on('close', code => {
-//
-// 		//console.log(__dirname);
-//\\
-
- process.chdir(dir);
+ ls.on('close', code => {
+console.log(process.cwd());
+spawn('git', ['add','.'])
+spawn('git', ['commit','-m',msg])
+spawn('git', ['remote','add','origin',repo])
+spawn('git', ['push','-u','origin','master'])
+console.log('It\'s saved!');
+ //process.chdir(dir);
 // console.log("now directory after all proces is ",process.cwd());
-// 		console.log(`child process exited with code ${code}`);
+		console.log(`child process exited with code ${code}`);
+    process.chdir(dir);
 
    	  });
 

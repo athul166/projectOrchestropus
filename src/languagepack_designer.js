@@ -26,6 +26,7 @@ class LanguagePackDesigner extends Component {
   constructor() {
                       super();
                       this.state={
+                        url:false,
                                     open:false,
                                     value:'',
                                     values:[],
@@ -105,15 +106,16 @@ handleChange(propertyname,event) {
         "has_projects": true,
         "has_wiki": true
     }, {
-      headers: {'Content-Type':'application/json','Authorization':'Bearer d6eec293ed5a64a243a894499bb9148bc1105312'}
+      headers: {'Content-Type':'application/json','Authorization':'Bearer 408f1cfd00e396f3f1bbf56a514bda310be1b58b'}
 
     })
      .then(function (response) {
-      console.log(response.data.clone_url);
-      that.setState({repo_url:response.data.clone_url});
+      console.log(response.data.ssh_url);
+      that.setState({repo_url:response.data.ssh_url,url:true});
 
    })
     .catch(function (error) {
+      alert("repo already exists");
       console.log(error);
     });
 
@@ -150,7 +152,7 @@ handleChange(propertyname,event) {
   ];
 
     return (
-    <MuiThemeProvider >{this.state.open_editor?<LanguagePack name={this.state.name} creator={this.state.creator} description={this.state.description} tags={this.state.tags} version={this.state.version} repo_url={this.state.repo_url}/>:
+    <MuiThemeProvider >{this.state.open_editor&&this.state.url?<LanguagePack name={this.state.name} creator={this.state.creator} description={this.state.description} tags={this.state.tags} version={this.state.version} repo_url={this.state.repo_url}/>:
       <div className="App">
       <FloatingActionButton style={style} onTouchTap={this.handleClick.bind(this)}>
         <ContentAdd label="Dialog" onTouchTap={this.handleOpen}/>

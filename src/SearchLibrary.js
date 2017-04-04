@@ -111,7 +111,7 @@ console.log("state is "+_this.state.new_arr_online);
      }
     }
     handleTouchTap() {
-      alert('You clicked the Chip.');
+    //  alert('You clicked the Chip.');
     }
 
     handleToggle = () => this.setState({open: !this.state.open});
@@ -119,7 +119,7 @@ console.log("state is "+_this.state.new_arr_online);
 
 onClickGo(event)
 {
-  alert("klkl");
+//  alert("klkl");
 //  console.log(this.state.value);
   var _this = this;
   var t=this.state.chipContent;
@@ -183,7 +183,7 @@ var url2=u2.substring(0,u2.length-13);
 }
 
 _onButtonClick() {
-  alert("lkl");
+//  alert("lkl");
     this.setState({
       showComponent: true,status:'workflow',d3_status:true
     });
@@ -266,7 +266,7 @@ click(input)
   // console.log(this.state.new_arr);
   this.setState({value:''});
 
-  alert("klkl");
+  //alert("klkl");
   //  console.log(this.state.value);
   var _this = this;
   var t=this.state.chipContent;
@@ -320,7 +320,7 @@ handleEnter(event){
 
 _onLanguage()
 {
-  alert("lkldsfsdfsdfsdfsdfsdfsdfsdfsdfdf");
+  //alert("lkldsfsdfsdfsdfsdfsdfsdfsdfsdfdf");
     this.setState({
       showComponent: true,status:'language'
     });
