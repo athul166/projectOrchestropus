@@ -18,6 +18,7 @@ var moment = require('moment');
 import Graph from './Graph';
 import Close from '../icons/close.png' ;
 import Edit from '../icons/edit.png';
+import Delete from '../icons/delete.png';
 
 import Download from '../icons/download.png';
 
@@ -49,6 +50,7 @@ export default class ViewWorkFlow extends Component {
       open_edit:false,
       open_save:false
     };
+      this.handleDelete=this.handleDelete.bind(this);
   }
   handleClose(){
     this.setState({closeStatus:true});
@@ -60,6 +62,38 @@ handleEdit = () => {
   //alert("saasdsadadadsadsd");
   this.setState({open_edit:true});
   this.props.changeStatus();
+}
+
+handleDelete()
+{
+  //alert("kok");
+//  alert(this.props.SelectedCard[0].workflow_name);
+  axios.post('http://localhost:6007/workflows/delete',{
+ // creatorName: that.state.creatorName,
+  workflowName:this.props.SelectedCard[0].workflow_name,
+  // tags:that.state.tags,
+  // description:that.state.description,
+  // text:that.state.text
+  })
+  .then(function (response) {
+   //alert("delted");
+
+    console.log(response);
+
+  })
+  .catch(function (error) {
+    console.log(error);
+  }.bind(this));
+
+  this.setState({open: false});
+  this.props.changeStatus();
+
+
+
+
+
+
+
 }
 
 
@@ -75,7 +109,7 @@ console.log(card.description);
 console.log(card.workflows);
 
 
-   
+
   axios.post('http://localhost:6007/workflows/delete',{
    // creatorName: that.state.creatorName,
     workflowName: card.workflow_name,
@@ -109,10 +143,10 @@ console.log(card.workflows);
 
 
 
- 
-     
+
+
   }
-    
+
 
 
 
@@ -271,7 +305,13 @@ console.log(card.workflows);
                     <img src={Edit} alt='edit'/>
                   </IconButton>
                 </FloatingActionButton></Link>
-               
+
+                <FloatingActionButton style={{'float':'right'}} onClick={this.handleDelete}>
+                <IconButton >
+                  <img src={Delete} alt='delete'/>
+                </IconButton>
+                </FloatingActionButton>
+
               </Col>
             </Row>
             <Divider style={{'width':'100%','marginTop':'20'}}/>

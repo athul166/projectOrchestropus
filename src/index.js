@@ -14,6 +14,13 @@ import Monitor from './monitor/Monitor';
 import SearchLibrary from './SearchLibrary';
 import Routes from './routes';
 import LanguagePackDesigner from './languagepack_designer';
+
+
+import cookie from 'react-cookie';
+import HomePageUpdated from './login';
+import './index.css';
+
+
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
@@ -23,8 +30,21 @@ injectTapEventPlugin();
 //   document.getElementById('root')
 // );
 
+function authentication(furtherstate,replace){
+ if(cookie.load("access_token")===undefined){
+
+           replace({pathname:'/login'});
+        }
+}
+
+
+
 ReactDOM.render(
 <Router history={hashHistory}>
+   <Route path="/login" component={HomePageUpdated}  />
+
+
+
      <Route path="/" component={App}>
        	<Route path="/home" component={Home} />
        	<Route path="/execute" component={Execute} />

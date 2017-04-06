@@ -5,7 +5,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
-
+import {  Link } from 'react-router';
+import Paper from 'material-ui/Paper';
+const style = {
+  height: 400,
+  width: 700,
+  margin: 20,
+  textAlign: 'center',
+  display: 'inline-block',
+};
 
 
 export default class Execute extends Component {
@@ -20,24 +28,24 @@ export default class Execute extends Component {
       new_arr:[],
       workflows_body:'',
       value: ''
-      
+
 
     }
   }
 
   componentDidMount(){
-    var _this = this;
     this.serverRequest =
     axios
-    .get("http://localhost:6007",)
+    .get("/all",)
     .then(function(result) {
       console.log("result is ");
       console.log(result.data);
       _this.setState({
         arr_div: result.data
       });
-         
+
         })
+        var _this = this;
 
   }
 
@@ -52,13 +60,14 @@ export default class Execute extends Component {
         console.log(this.state.templateName);
       }
       handleRequest(a){
-        alert("asfasf");
+      //  alert("asfasf");
     console.log(a,"  a")
         axios.post('http://localhost:4070/api/v1/jobs',{
           payload : {
             repoUrl : this.state.url
           },
           template: a,
+          templateName:this.state.itemvalue
         })
         .then(function(response){
           console.log(response);
@@ -71,7 +80,7 @@ export default class Execute extends Component {
 
       onClickGo()
       {
-        alert("awidhoiewje");
+      //  alert("awidhoiewje");
         var _this = this;
         var it=_this.state.itemvalue;
         console.log("this is it "+it);
@@ -91,10 +100,10 @@ export default class Execute extends Component {
             console.log(_this.state.workflows_body,"ioioioioioioi");
         _this.handleRequest(_this.state.workflows_body);
 
-       
+
         })
-       
-         
+
+
 
 
 
@@ -107,7 +116,7 @@ export default class Execute extends Component {
         this.setState({itemvalue: itemvalue1});
         console.log("itemvalue is "+this.state.itemvalue);
 
-      } 
+      }
 
       render(){
          console.log("workflows boy only  "+this.state.workflows_body);
@@ -120,19 +129,20 @@ export default class Execute extends Component {
 
           return(
           <Container>
+           <Paper style={style} zDepth={2} >
           <Row>
           <TextField
-          floatingLabelText="Git Url"
+          floatingLabelText="Enter Your Git Url here"
           onChange={this.handleChangeUrl.bind(this)}/>
           </Row>
 
           <Row>
-          <DropDownMenu maxHeight={300} value={this.state.value} onChange={this.handleChange.bind(this)}>
+         Choose Workflow    <DropDownMenu maxHeight={300} value={this.state.value}  onChange={this.handleChange.bind(this)}>
           {items}
           </DropDownMenu>
           <RaisedButton label="Go" primary={true} style={{'marginLeft':'5'}} onClick={this.onClickGo.bind(this)}/>
           </Row>
-
+          </Paper>
           </Container>
           );
         }

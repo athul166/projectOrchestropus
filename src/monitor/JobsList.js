@@ -4,49 +4,38 @@ import Paper from 'material-ui/Paper';
 import { Container, Row, Col } from 'react-grid-system';
 import Divider from 'material-ui/Divider';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 class JobsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       jobList : [],
-      results : []
+      results : [],
+      status : '',
+      socket : io('http://localhost:4070/'),
     };
   }
   componentDidMount(){
-    this.context.socket.on('result', this.handleData.bind(this));
+    var _this = this;
+    this.serverRequest =
+      axios
+        .get("http://localhost:6007/jobs",)
+        .then(function(result) {
+          // console.log("result is ");
+          // console.log(result.data);
+          _this.setState({
+            jobList: result.data
+          });
+          // console.log("state is "+_this.state.jobList);
+        });
+    //this.state.socket.on('status', this.handleStatus.bind(this));
   }
-  handleData(results){
-    //var results = JSON.parse(data);
-    //console.log(results.jobId);
-    this.setState({
-      results:results
-    });
-    //console.log(this.state.results);
-    var jobs = this.state.jobList;
-    if(jobs.length!=0) {
-      var flag=0;
-      jobs.map((job) => {
-        if(job.jobId==results.jobId){
-          flag=1;
-        }
-      });
-      if(flag==0){
-        jobs.push({
-          jobId : results.jobId ,
-          jobStatus : this.state.results.stages.status
-        })
-      }
-    } else {
-      jobs.push({
-        jobId : results.jobId ,
-        jobStatus : this.state.results.stages.status
-      })
-    }
-    this.setState({
-      jobList : jobs
-    })
-  }
+  // handleStatus(status){
+  //   this.setState({
+  //     status : status
+  //   })
+  // }
 
     render() {
     var jobs = this.state.jobList.map((job)=>{
@@ -60,7 +49,6 @@ class JobsList extends Component {
                   />
                 </Col>
                 <Col sm={4} style={{'marginTop':15}}>
-                  started
                 </Col>
                 <Col sm={2} style={{'marginTop':15}}>
                   <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">

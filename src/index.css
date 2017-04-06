@@ -1,0 +1,104 @@
+.build
+{
+    margin-top: 2%;
+}
+
+
+.AppDesc
+{
+    text-align: center;
+    margin-top: 5%;
+    margin-left: 5%;
+    font-family: 'Acme',sans-serif;
+}
+.AppHeading
+{
+    color: #0D47A1;
+    font-family: 'Acme',sans-serif;
+    font-size: 30px;
+}
+.AppText
+{
+    font-family: 'Acme', sans-serif;
+}
+
+.Features
+{
+    margin-top: 4%;
+    font-family: 'Acme', sans-serif;
+    color: #283593;
+}
+
+
+.FeaturesDesc
+{
+    color: #78909C;
+}
+
+.footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+
+.AppTitle
+{
+    font-family: 'Caveat Brush', cursive;
+    position: absolute;
+    top:-30px;
+    left:30px;
+    color: white;
+    font-size: 64px;
+}
+
+
+
+.build
+{
+    margin-top: 2%;
+}
+
+.AppDesc
+{
+    text-align: center;
+    margin-top: 5%;
+    margin-left: 5%;
+}
+.AppHeading
+{
+    color: #0D47A1;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 30px;
+}
+.AppText
+{
+    font-family: 'Droid Sans', sans-serif;
+}
+
+.Features
+{
+    margin-top: 4%;
+    font-family: 'Muli', sans-serif;
+    color: #283593;
+}
+.iconRow
+{
+    margin-top: 4%;
+}
+
+.FeaturesDesc
+{
+    font-family:'Acme',sans-serif;
+    color: #78909C;
+}
+
+footer {
+    padding: 1em;
+    color:white;
+    background-color:#000000;
+    clear: left;
+    text-align: center;
+}

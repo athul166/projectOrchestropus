@@ -10,6 +10,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
 import LanguagePack from './languagepack.js';
+import {  Link } from 'react-router';
+import TextField from 'material-ui/TextField';
+
 
 
 const style = {
@@ -27,7 +30,7 @@ class LanguagePackDesigner extends Component {
                       super();
                       this.state={
                         url:false,
-                                    open:false,
+                                    open:true,
                                     value:'',
                                     values:[],
                                     creator:'',
@@ -41,7 +44,7 @@ class LanguagePackDesigner extends Component {
 }
 
 handleOpen = () => {
-    this.setState({open: true});
+    this.setState({open: false});
   };
 
   handleClose = () => {
@@ -96,6 +99,7 @@ handleChange(propertyname,event) {
   handleCreate()
   {
 
+
     var that=this;
     axios.post('https://api.github.com/user/repos',{
         "name": this.state.name,
@@ -111,6 +115,7 @@ handleChange(propertyname,event) {
     })
      .then(function (response) {
       console.log(response.data.ssh_url);
+    //  console.log(cookies.access_token);
       that.setState({repo_url:response.data.ssh_url,url:true});
 
    })
@@ -135,6 +140,32 @@ handleChange(propertyname,event) {
 
 
 
+  //////////////////////
+
+
+          //  Creator:
+          //  <input type="text"  value={this.state.creator} onChange={this.handleChange.bind(this,"creator")}/>
+          //  </label><br/>
+          //  <label>
+          //  LanguagePack Name:
+          //  <input type="text"  value={this.state.name} onChange={this.handleChange.bind(this,"name")}/>
+          //  </label><br/>
+          //  <label>
+          //  Description:
+          //  <input type="text"  value={this.state.description} onChange={this.handleChange.bind(this,"desc")}/>
+          //  </label><br/>
+          //  <label>
+          //  Version:
+          //  <input type="text"  value={this.state.version} onChange={this.handleChange.bind(this,"version")} />
+          //  </label><br/>
+          //  <label>
+          //  Tags:
+          //  <input type="text"  value={this.state.tags} onChange={this.handleChange.bind(this,"tags")}/>
+          //  </label><br/>
+    /////////////////////////////
+
+
+
   render() {
     const actions = [
       <FlatButton
@@ -143,20 +174,17 @@ handleChange(propertyname,event) {
         keyboardFocused={true}
         onTouchTap={this.handleCreate}
       />,
-    <FlatButton
+  <Link to={'/home'}><FlatButton
       label="Cancel"
       primary={true}
       onTouchTap={this.handleClose}
-    />,
+    />,</Link>
 
   ];
 
     return (
     <MuiThemeProvider >{this.state.open_editor&&this.state.url?<LanguagePack name={this.state.name} creator={this.state.creator} description={this.state.description} tags={this.state.tags} version={this.state.version} repo_url={this.state.repo_url}/>:
       <div className="App">
-      <FloatingActionButton style={style} onTouchTap={this.handleClick.bind(this)}>
-        <ContentAdd label="Dialog" onTouchTap={this.handleOpen}/>
-        </FloatingActionButton>
 
         <Dialog
          title="Create Language Pack"
@@ -164,27 +192,36 @@ handleChange(propertyname,event) {
          modal={false}
          open={this.state.open}
          onRequestClose={this.handleClose}>
+         <TextField
+               defaultValue="Default Value"
+               floatingLabelText="Creator Name"
+               value={this.state.creator} onChange={this.handleChange.bind(this,"creator")}
+             /><br />
 
-         <label>
-         Creator:
-         <input type="text"  value={this.state.creator} onChange={this.handleChange.bind(this,"creator")}/>
-         </label><br/>
-         <label>
-         LanguagePack Name:
-         <input type="text"  value={this.state.name} onChange={this.handleChange.bind(this,"name")}/>
-         </label><br/>
-         <label>
-         Description:
-         <input type="text"  value={this.state.description} onChange={this.handleChange.bind(this,"desc")}/>
-         </label><br/>
-         <label>
-         Version:
-         <input type="text"  value={this.state.version} onChange={this.handleChange.bind(this,"version")} />
-         </label><br/>
-         <label>
-         Tags:
-         <input type="text"  value={this.state.tags} onChange={this.handleChange.bind(this,"tags")}/>
-         </label><br/>
+         <TextField
+               defaultValue="Default Value"
+               floatingLabelText="Language Pack Name"
+               value={this.state.name} onChange={this.handleChange.bind(this,"name")}
+         /><br />
+
+          <TextField
+               defaultValue="Default Value"
+               floatingLabelText="Description of language pack "
+                value={this.state.description} onChange={this.handleChange.bind(this,"desc")}
+         /><br />
+
+           <TextField
+                 defaultValue="Default Value"
+                 floatingLabelText="Version"
+                 value={this.state.version} onChange={this.handleChange.bind(this,"version")}
+           /><br />
+
+            <TextField
+                 defaultValue="Default Value"
+                 floatingLabelText="Tags"
+                  value={this.state.version} onChange={this.handleChange.bind(this,"version")}
+             /><br />
+
        </Dialog>
       </div>}
     </MuiThemeProvider>

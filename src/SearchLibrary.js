@@ -68,35 +68,67 @@ class SearchLibrary extends Component {
        arr_div_online:[],
        new_arr_online:[]
     };
+    this.getData=this.getData.bind(this);
   }
   componentDidMount(){
-    var _this = this;
-    this.serverRequest =
-      axios
-        .get("http://localhost:6007",)
-        .then(function(result) {
-          console.log("result is ");
-          console.log(result.data);
-          _this.setState({
-            arr_div: result.data
-          });
-          console.log("state is "+_this.state.arr_div);
-        })
-
-
-         this.serverRequest =
-      axios
-        .get("http://35.154.207.12/workflow/get",)
-        .then(function(result) {
-          console.log("result is ");
-        console.log(result.data);
-          _this.setState({
-            arr_div_online: result.data
-          });
-console.log("state is "+_this.state.new_arr_online);
-        })
+//     var _this = this;
+//     this.serverRequest =
+//       axios
+//         .get("http://localhost:6007",)
+//         .then(function(result) {
+//           console.log("result is ");
+//           console.log(result.data);
+//           _this.setState({
+//             arr_div: result.data
+//           });
+//           console.log("state is "+_this.state.arr_div);
+//         })
+//
+//
+//          this.serverRequest =
+//       axios
+//         .get("http://35.154.207.12/workflow/get",)
+//         .then(function(result) {
+//           console.log("result is ");
+//         console.log(result.data);
+//           _this.setState({
+//             arr_div_online: result.data
+//           });
+// console.log("state is "+_this.state.new_arr_online);
+//         })
+this.getData();
 
     }
+getData()
+{
+  var _this = this;
+  this.serverRequest =
+    axios
+      .get("/all",)
+      .then(function(result) {
+        console.log("result is ");
+        console.log(result.data);
+        _this.setState({
+          arr_div: result.data
+        });
+        console.log("state is "+_this.state.arr_div);
+      })
+
+
+       this.serverRequest =
+    axios
+      .get("http://35.154.207.12/workflow/get",)
+      .then(function(result) {
+        console.log("result is ");
+      console.log(result.data);
+        _this.setState({
+          arr_div_online: result.data
+        });
+console.log("state is "+_this.state.new_arr_online);
+      })
+
+}
+
  handleRequestDelete(i) {
     var arr=this.state.chipContent;
     arr.splice(i,1);
@@ -369,7 +401,7 @@ _onLanguage()
       <Row>
           <TextField
                 hintText="Search here"
-                floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)} value={this.state.value}/>
+                floatingLabelText="Floating Label Text"  onChange={this.handleChange.bind(this)}/>
           <RaisedButton label="Go" primary={true} onClick={this.onClickGo.bind(this)} style={{'marginLeft':'5'}}/>
       </Row>
       <Row>
@@ -378,14 +410,14 @@ _onLanguage()
       <Tabs style={{'marginTop':'40'}}>
           <Tab label="Online Repo">
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                 {status2 ? <CardComponent_online  pageData={this.state.arr_div_online}/> : <CardComponent_online  pageData={this.state.new_arr_online.reverse()} /> }
+                 {status2 ? <CardComponent_online  pageData={this.state.arr_div_online.reverse()}/> : <CardComponent_online  pageData={this.state.new_arr_online.reverse()} /> }
 
 
             </div>
           </Tab>
           <Tab label="Local Repo" >
             <div style={{'marginTop':'10','margin-left': '50','margin-right': '50'}}>
-                {status2 ? <CardComponent  pageData={this.state.arr_div}/> : <CardComponent   pageData={this.state.new_arr.reverse()} /> }
+                {status2 ? <CardComponent  pageData={this.state.arr_div.reverse()}/> : <CardComponent   pageData={this.state.new_arr.reverse()} /> }
             </div>
           </Tab>
 

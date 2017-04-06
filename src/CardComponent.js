@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 
+
 import {
   blue300,
   indigo900,
@@ -34,6 +35,7 @@ const style = {
               width: 280,
               margin: 5,
               display: 'inline-block',
+
               //whiteSpace: 'nowrap'
 
            },
@@ -61,6 +63,7 @@ class CardComponent extends Component{
       //over:false,
       SelectedCard:[]
     };
+
   }
   onClickCardToNext(item){
     console.log(item,"item");
@@ -77,6 +80,11 @@ class CardComponent extends Component{
     this.setState({isEditing:false});
     this.setState({SelectedCard:[]})
   }
+
+
+
+
+
     render()
     {
     const status1=this.state.isEditing;
@@ -116,10 +124,13 @@ class CardComponent extends Component{
      <Row >
      <CardText style={style.CardText1} >
         {tags}
-  </CardText>
+    </CardText>
 
       </Row>
 
+<Row>
+
+</Row>
     </Row>
        </Container>
 

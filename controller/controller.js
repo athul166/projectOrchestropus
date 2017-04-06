@@ -4,7 +4,8 @@ const yaml = require('js-yaml');
 var mongo=require('mongodb');
 var url = "mongodb://localhost:27018/workflowsandlanpacks";
 const fs = require('fs');
-
+var Jobs=require('./../models/jobs');
+const client = require('../redisClient').duplicate();
  const spawn = require('child_process').spawn;
 
 
@@ -29,6 +30,9 @@ const fs = require('fs');
 // 			}
 // 	})
 // }
+
+
+
 
 
 var get=function(req,res){
@@ -79,8 +83,6 @@ var get=function(req,res){
 
 
 };
-
-
 
 var get1=function(req,res){
 	var name=req.query.name;
@@ -146,6 +148,34 @@ var add = function(req,res){
 	 }
 
 
+
+
+	 var stage=function(req,res){
+		 console.log("in stage ");
+	   const stagesKey = req.query.jobId + ':stages';
+	   client.hgetall(stagesKey, (err, replyMap) => {
+	     if(err) { console.error('Error Retrieving Stages:', err); return; }
+	     console.log(stagesKey);
+	     console.log(replyMap);
+	     // const stages = convertHgetReplyToObject(replyMap);
+	     // console.log("stages ====> "+stages);
+	     res.send(replyMap);
+	   });
+	 }
+
+
+
+
+	var job= function(req,res){
+	 	Jobs.find({},function(err,docs){
+	      if(err){
+	 	res.status(500);
+	 	res.send("Internal errr");
+	 }else{
+	 	//console.log(docs);
+	     res.json(docs);
+	     }})
+	 }
 
 
 
@@ -436,11 +466,16 @@ console.log('It\'s saved!');
 
 		delete1:delete1,
 
+		job:job,
+		stage:stage,
+
 		addLang:addLang,
 
 		del:del,
 
 		addGitRepo:addGitRepo,
-		get1:get1
+		get1:get1,
+  
+
 
   }

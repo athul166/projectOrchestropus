@@ -40,7 +40,10 @@ class Workflow extends Component {
       obj:{},
       open_ok:false,
       open1:false,
-      open_ok1:false
+      open_ok1:false,
+      openTest:false,
+      url:"",
+      space:'                 '
     }
     this.updateFilename=this.updateFilename.bind(this);
     this.showFileName=this.showFileName.bind(this);
@@ -154,6 +157,7 @@ handleOk()
       console.log("obj is ",this.props.params.templateName);
     axios.get('http://localhost:6007/workflows/get?name='+this.props.params.templateName,)
   .then(function (response) {
+
     console.log("data is "+response);
     that.setState({obj:response.data[0]});
     console.log("obj is ",that.state.obj);
@@ -219,6 +223,13 @@ else
 
       //this.setState({creatorName:c});
     //  console.log(this.state.creatorName);
+    var tag=this.state.tags.split(",");
+
+
+
+
+
+
     console.log("in save")
       var that=this;
      // var creator=this.state.creatorName;
@@ -268,7 +279,7 @@ else
      axios.post('http://localhost:6007/workflows/add',{
       creatorName: that.state.creatorName,
       workflowName: that.state.workflowName,
-      tags:that.state.tags,
+      tags:tag,
       description:that.state.description,
       text:that.state.text
     })
@@ -421,7 +432,37 @@ else
       this.setState({ nodes: [], links: [], statePresent: true});
   }
 }
+handleOpenTest = () => {
+  this.setState({
+    openTest:true
+  })
+}
+handleCloseTest = () => {
+  this.setState({
+    openTest:false
+  })
+}
+  handleChangeUrl(evt){
+  this.setState({url:evt.target.value});
+  };
+handleTest = () =>{
 
+   this.setState({openTest: false});
+
+   axios.post('http://localhost:4070/api/v1/jobs',{
+         payload : {
+         repoUrl : this.state.url
+    },
+    template: this.state.textChanged,
+    templateName:this.state.workflowName
+    })
+    .then(function(response){
+     console.log(response);
+    })
+    .catch(function(err) {
+     console.log(err);
+  });
+}
   render() {
     const actions = [
       <FlatButton
@@ -436,10 +477,22 @@ else
         onTouchTap={this.addUpload}
       />,
     ];
-
+    const actionsTest = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleCloseTest}
+      />,
+      <FlatButton
+        label="Test"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleTest}
+      />,
+    ];
     const actions_ok = [
 
-      <Link to={'/workflows'}><FlatButton
+      <Link to={'/home'}><FlatButton
         label="Ok"
         primary={true}
 
@@ -528,15 +581,36 @@ else
       <GridList cellHeight="auto" cols={2} style={{marginTop:"2%"}}>
         <GridTile>
           <div >
-          <input type = 'text' id = 'creatorName'  name = 'creator' onChange={this.onCreator.bind(this)} placeholder="Creator Name" style={{'border':0,'fontSize':'18'}} /> /
-           <input type = 'text' id = 'workflowName' name = 'name' onChange={this.onName.bind(this)} placeholder="   Name Of WorkFlow" style={{'border':0,'fontSize':'18'}} />
- <br/>
-          < input type = 'text' id = 'tags' name = 'Tags' onChange={this.onTags.bind(this)} placeholder="Tags" style={{'border':0,'fontSize':'18'}} /><br/>
-          <textarea type='textarea' id = 'description' rows={2} cols={50}  onChange={this.onDesc.bind(this)} placeholder="Descripion"  style={{'border':0,'fontSize':'18'}}/>
- <br/><br/>
+          <TextField
+     floatingLabelText="Enter Creator Name"
+     floatingLabelFixed={true} id = 'creatorName'  name = 'creator' onChange={this.onCreator.bind(this)}
+   />{this.state.space}
+
+   <TextField
+        floatingLabelText="Enter Workflow Name"
+        floatingLabelFixed={true} id = 'workflowName' name = 'name' onChange={this.onName.bind(this)}
+      /><br />
+
+
+      <TextField
+     floatingLabelText="Enter Tags"
+     floatingLabelFixed={true} id = 'tags' name = 'Tags' onChange={this.onTags.bind(this)}
+   /><br />
+
+
+   <TextField
+     floatingLabelText="Enter Description"  style={{'width':'80%'}}
+     floatingLabelFixed={true} id = 'description' rows={2} cols={50}  onChange={this.onDesc.bind(this)}
+   /><br />
+
+
+
+
           </div>
           <div >
-          <CodeMirror ref="editor" onChange={this.handleChange.bind(this)} value={this.state.text}  options={options} />
+          <div style={{'border':1}}>
+          <CodeMirror ref="editor" onChange={this.handleChange.bind(this)} value={this.state.text}  options={options} style={{'border':'1'}}/>
+          </div>
           <textarea type='textarea' rows={45} cols={80} value={ this.state.textChanged } style={{'display':'none'}}/>
            </div>
            <div>
@@ -554,8 +628,15 @@ else
                                       containerElement="label" primary={true}>
                                        <input type="file" id="myFile" style={styles.exampleImageInput} onChange={this.twoFunc.bind(this)} />
                                 </RaisedButton>
-                                 <RaisedButton label="Test"   />
+                                 <RaisedButton label="Test"  onTouchTap={this.handleOpenTest} />
+                                   <Dialog
 
+                                         actions={actionsTest}
+                                         modal={true}
+                                         open={this.state.openTest}
+                                       >
+                                       <TextField hintText="Enter Git Repo Url" onChange={this.handleChangeUrl.bind(this)} style={{'width':'80%'}} /><br/>
+                                   </Dialog>
                                    <RaisedButton label="Upload"  style={styles.button1} onTouchTap={this.handleOpen}/>
                                     <Dialog
                                           title="Are You Sure You Want To Upload This Workflow ?"
@@ -594,19 +675,31 @@ else
       <GridList cellHeight="auto" cols={2} style={{marginTop:"2%"}}>
         <GridTile>
           <div >
-          <input type = 'text' id = 'creatorName'    onChange={this.onCreator.bind(this)} value={this.state.creatorName} style={{'border':0,'fontSize':'18'}} /> /
-           <input type = 'text' id = 'workflowName'  onChange={this.onName.bind(this)} value={this.state.workflowName}style={{'border':0,'fontSize':'18'}} />
- <br/>
-          < input type = 'text' id = 'tags' name = 'Tags' onChange={this.onTags.bind(this)} value={this.state.obj.tags} style={{'border':0,'fontSize':'18'}} /><br/>
-          <textarea type='textarea' id = 'description' rows={2} cols={50}  onChange={this.onDesc.bind(this)} value={this.state.description}  style={{'border':0,'fontSize':'18'}}/>
- <br/><br/>
+          <TextField
+     floatingLabelText="Creator Name"
+     floatingLabelFixed={true} id = 'creatorName'    onChange={this.onCreator.bind(this)} value={this.state.creatorName}
+   />{this.state.space}
+
+   <TextField
+     floatingLabelText="Workflow Name"
+     floatingLabelFixed={true} id = 'workflowName'  onChange={this.onName.bind(this)} value={this.state.workflowName}
+   /><br />
+   <TextField
+     floatingLabelText="Tags"
+     floatingLabelFixed={true} id = 'tags' name = 'Tags' onChange={this.onTags.bind(this)} value={this.state.tags}
+   /><br />
+   <TextField  style={{'width':'3000'}}
+      floatingLabelText="Description"
+      floatingLabelFixed={true} id = 'description' rows={2} cols={50}  onChange={this.onDesc.bind(this)} value={this.state.description}
+    /><br />
+   <br/><br/>
           </div>
           <div >
           <CodeMirror ref="editor" onChange={this.handleChange.bind(this)} value={this.state.text}  options={options} />
           <textarea type='textarea' rows={45} cols={80} value={ this.state.textChanged } style={{'display':'none'}}/>
 
-           </div>
            <div>
+           </div>
            <br/>
           {this.state.statePresent ? <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={this.state.errorText} id='text_area'/> : <textarea type='textarea' rows={3} cols={72} style={{'resize':'none'}} value={"Warning: "+this.state.errorText+" is not present"} id='text_area1'/>}
                    </div>

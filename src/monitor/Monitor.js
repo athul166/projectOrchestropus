@@ -22,6 +22,15 @@ class Monitor extends Component {
       stageName : ''
     };
   }
+
+  handleChangeBack = (value,jobId,stageName) => {
+      this.setState({
+        slideIndex: value,
+        jobId : jobId,
+        stageName : stageName
+    });
+  };
+
   handleChange = (value,jobId,stageName) => {
       this.setState({
         slideIndex: value,
@@ -38,8 +47,8 @@ class Monitor extends Component {
             onChangeIndex={this.handleChange}
           >
             <JobsList handleClick={this.handleChange.bind(this)} />
-            <StageList handleClick={this.handleChange.bind(this)} jobId={this.state.jobId} />
-            <Results handleClick={this.handleChange.bind(this)} jobId={this.state.jobId} stageName={this.state.stageName}/>
+            { this.state.jobId!='' && <StageList handleClick={this.handleChange.bind(this)}  handleClickBack={this.handleChangeBack.bind(this)} jobId={this.state.jobId} /> }
+            { this.state.stageName!='' &&<Results handleClick={this.handleChange.bind(this)} jobId={this.state.jobId} handleClickBack={this.handleChangeBack.bind(this)} stageName={this.state.stageName}/>}
           </SwipeableViews>
         </div>
       </MuiThemeProvider>
