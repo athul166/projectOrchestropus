@@ -7,6 +7,8 @@ import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import {  Link } from 'react-router';
 import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+
 const style = {
   height: 400,
   width: 700,
@@ -130,6 +132,8 @@ export default class Execute extends Component {
           return(
           <Container>
            <Paper style={style} zDepth={2} >
+           <h2>Execute Workflow</h2>
+           <Divider />
           <Row>
           <TextField
           floatingLabelText="Enter Your Git Url here"

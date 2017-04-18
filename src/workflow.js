@@ -17,6 +17,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {  Link } from 'react-router';
 var YAML = require('json2yaml');
+let timer
 
 class Workflow extends Component {
   constructor(props) {
@@ -121,24 +122,31 @@ class Workflow extends Component {
     }
   }
 
-  handleChange = (event) => {
-   if(!event) { this.setState({textChanged: '', errorText: ''});}
-     try{
-      yaml.loadAll(event, (doc) => {
-        this.setState({textChanged: doc, errorText: ''});
-      });
-     }
-    catch(err){
-     console.log("message is "+ err.message);
-     this.setState({errorText:err.message});
-      var startindex=err.message.indexOf("at line") + 8;
-        var endindex=err.message.indexOf("column")-2;
-        var errrow=err.message.substring(startindex,endindex);
-        // console.log(errrow);
+  handleChange = (event) => {   if(!event) { this.setState({textChanged: '', errorText: ''});}
+    try{
+     yaml.loadAll(event, (doc) => {
+       this.setState({textChanged: doc, errorText: ''});
+     });
     }
-      this.setState({ text:event});
-      this.forceUpdate(this.createJSON);
-  }
+   catch(err){
+    console.log("message is "+ err.message);
+    this.setState({errorText:err.message});
+     var startindex=err.message.indexOf("at line") + 8;
+       var endindex=err.message.indexOf("column")-2;
+       var errrow=err.message.substring(startindex,endindex);
+       // console.log(errrow);
+   }
+     this.setState({ text:event});      //setTimeout(this.forceUpdate(this.createJSON),50000);
+     // const timer = setTimeout(() => {
+     //   this.forceUpdate(this.createJSON);
+     //   clearTimeout(timer);
+
+    //   }, 5000);
+     if(timer) { clearTimeout(timer); }
+     timer = setTimeout(() => {
+       this.forceUpdate(this.createJSON);
+     }, 500  );
+ }
 
 
 
@@ -657,7 +665,7 @@ handleTest = () =>{
 
         </GridTile>
       <GridTile style={{height:"650px",marginTop:"0%"}}>
-        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={ 700} height={ 630 } />
+        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={600} height={ 630 } />
          </GridTile>
          </GridList>
 
@@ -720,7 +728,7 @@ handleTest = () =>{
 
         </GridTile>
       <GridTile style={{height:"650px",marginTop:"0%"}}>
-        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={ 700} height={ 630 } />
+        <Graph styles={ styles.graph } nodes={ this.state.nodes } links={ this.state.links } width={600} height={ 630 } />
          </GridTile>
          </GridList>
 

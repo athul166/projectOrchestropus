@@ -6,6 +6,7 @@ import StageList from './StageList'
 import SwipeableViews from 'react-swipeable-views';
 import Divider from 'material-ui/Divider';
 import io from 'socket.io-client';
+import { Container, Row, Col } from 'react-grid-system';
 
 class Monitor extends Component {
   getChildContext(){
@@ -42,6 +43,10 @@ class Monitor extends Component {
     return (
       <MuiThemeProvider>
         <div>
+          <Container>
+            <h2>Job Execution</h2>
+            <Divider />
+          </Container>
           <SwipeableViews
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}

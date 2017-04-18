@@ -7,7 +7,7 @@ class Graph extends Component {
     const { width, height } = this.props;
      var markerWidth = 6,
         markerHeight = 6,
-        cRadius = 30, // play with the cRadius value
+        cRadius = 18, // play with the cRadius value
         refX = cRadius + (markerWidth * 2),
         refY = -Math.sqrt(cRadius),
         drSub = cRadius + refY;
@@ -38,7 +38,7 @@ class Graph extends Component {
       .nodes(d3.values(this.props.nodes))
       .links(d3.values(this.props.links))
       .size([width, height])
-      .linkDistance(500)
+      .linkDistance(350)
       .charge(-1500)
       .gravity(0.3)
       .on("tick", tick)
@@ -71,17 +71,20 @@ class Graph extends Component {
         .data(force.nodes())
         .enter().append("svg:g");
 
+
          text.append("svg:text")
         .attr("x", 0)
         .attr("y", ".51em")
         .attr("class", "shadow")
+        .style("font-size", 20)
         .text(function (d) {
         return d.name;
     });
 
     text.append("svg:text")
         .attr("x", 0)
-        .attr("y", ".51em")
+        .attr("y", ".100em")
+        .style("font-size", 20)
         .text(function (d) {
         return d.name;
     });

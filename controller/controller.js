@@ -2,7 +2,7 @@ var Workflow=require('./../models/workflow');
 const yaml = require('js-yaml');
 //var mongo=require('mongodb');
 var mongo=require('mongodb');
-var url = "mongodb://localhost:27018/workflowsandlanpacks";
+var url = "mongodb://localhost:27017/workflowsandlanpacks";
 const fs = require('fs');
 var Jobs=require('./../models/jobs');
 const client = require('../redisClient').duplicate();
@@ -475,7 +475,7 @@ console.log('It\'s saved!');
 
 		addGitRepo:addGitRepo,
 		get1:get1,
-  
+
 
 
   }

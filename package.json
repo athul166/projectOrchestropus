@@ -16,6 +16,7 @@
     "material-ui": "^0.17.1",
     "moment": "^2.18.0",
     "mongoose": "^4.9.0",
+    "oauth": "^0.9.15",
     "react": "^15.4.2",
     "react-codemirror": "^0.3.0",
     "react-cookie": "^1.0.5",
@@ -30,7 +31,8 @@
     "react-tap-event-plugin": "^2.0.1",
     "redis": "^2.7.1",
     "socket.io": "^1.7.3",
-    "socket.io-client": "^1.7.3"
+    "socket.io-client": "^1.7.3",
+    "superagent": "^3.5.2"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
